@@ -4,8 +4,8 @@ import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
 import app.simplecloud.plugin.prefixes.shared.MiniMessageImpl
+import app.simplecloud.plugin.prefixes.shared.PrefixesApiLuckPermsImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
-import net.kyori.adventure.text.minimessage.MiniMessage
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -21,14 +21,14 @@ import java.util.*
 
 class PrefixesPlugin : JavaPlugin(), Listener {
 
-    private lateinit var prefixesApi: PrefixesApiSpigotImpl
+    private lateinit var prefixesApi: PrefixesApiLuckPermsImpl
     private val scoreboard: PrefixesScoreboardSpigotImpl = PrefixesScoreboardSpigotImpl()
     private val prefixesApiActor: PrefixesActorSpigotImpl = PrefixesActorSpigotImpl(scoreboard)
 
     override fun onEnable() {
         val luckPermsProvider: RegisteredServiceProvider<LuckPerms> = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
-        prefixesApi = PrefixesApiSpigotImpl(luckPerms)
+        prefixesApi = PrefixesApiLuckPermsImpl(luckPerms)
         prefixesApi.setActor(prefixesApiActor)
         prefixesApi.setConfig(PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(PrefixesConfigImpl::class.java, PrefixesConfigImpl()))
         saveResource("config.json", false)

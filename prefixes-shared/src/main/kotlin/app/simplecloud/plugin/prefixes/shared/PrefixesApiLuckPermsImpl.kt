@@ -1,12 +1,9 @@
-package app.simplecloud.plugin.prefixes.spigot
+package app.simplecloud.plugin.prefixes.shared
 
-import app.simplecloud.plugin.prefixes.api.PrefixesConfig
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesApiImpl
-import app.simplecloud.plugin.prefixes.shared.LuckPermsGroup
 import net.luckperms.api.LuckPerms
-import java.util.*
 
-class PrefixesApiSpigotImpl(private var luckPerms: LuckPerms) : PrefixesApiImpl() {
+class PrefixesApiLuckPermsImpl(private var luckPerms: LuckPerms) : PrefixesApiImpl() {
     override fun indexGroups() {
         getGroups().clear()
         luckPerms.groupManager.loadAllGroups().newIncompleteFuture<Unit>().completeAsync {
