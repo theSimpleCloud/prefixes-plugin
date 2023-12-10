@@ -1,11 +1,14 @@
 package app.simplecloud.plugin.prefixes.api
 
-interface PrefixesActor<T, E> {
-    fun applyGroup(target: T, group: PrefixesGroup<E>)
+import net.kyori.adventure.text.Component
+import java.util.UUID
 
-    fun setPrefix(target: T, prefix: PrefixesNameElement<E>)
+interface PrefixesActor {
+    fun applyGroup(target: UUID, group: PrefixesGroup)
 
-    fun setSuffix(target: T, suffix: PrefixesNameElement<E>)
+    fun setPrefix(target: UUID, prefix: Component)
 
-    fun remove(target: T)
+    fun setSuffix(target: UUID, suffix: Component)
+
+    fun remove(target: UUID)
 }

@@ -3,22 +3,24 @@ package app.simplecloud.plugin.prefixes.api.impl
 import app.simplecloud.plugin.prefixes.api.PrefixesActor
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.PrefixesNameElement
+import net.kyori.adventure.text.Component
+import java.util.UUID
 
-class PrefixesActorBlankImpl<T, E> : PrefixesActor<T, E> {
+class PrefixesActorBlankImpl : PrefixesActor {
 
-    override fun applyGroup(target: T, group: PrefixesGroup<E>) {
+    override fun applyGroup(target: UUID, group: PrefixesGroup) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
-    override fun setPrefix(target: T, prefix: PrefixesNameElement<E>) {
+    override fun setPrefix(target: UUID, prefix: Component) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
-    override fun setSuffix(target: T, suffix: PrefixesNameElement<E>) {
+    override fun setSuffix(target: UUID, suffix: Component) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
-    override fun remove(target: T) {
+    override fun remove(target: UUID) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 }

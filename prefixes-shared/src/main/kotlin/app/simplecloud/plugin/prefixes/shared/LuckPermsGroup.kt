@@ -2,28 +2,29 @@ package app.simplecloud.plugin.prefixes.shared
 
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.PrefixesNameElement
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.model.group.Group
 import java.util.*
 import java.util.concurrent.CompletableFuture
 
-class LuckPermsGroup(private var group: Group, private var luckPerms: LuckPerms) : PrefixesGroup<TextComponent> {
+class LuckPermsGroup(private var group: Group, private var luckPerms: LuckPerms) : PrefixesGroup {
 
     override fun getName(): String {
         return group.name;
     }
 
-    override fun getPrefix(): PrefixesNameElement<TextComponent> {
-        return PrefixesComponentNameElement((group.cachedData.metaData.prefix ?: "").replace("&", "§"))
+    override fun getPrefix(): Component {
+        return MiniMessageImpl.parse((group.cachedData.metaData.prefix ?: "").replace("&", "§"))
     }
 
-    override fun getColor(): PrefixesNameElement<TextComponent> {
-        return PrefixesComponentNameElement(group.cachedData.metaData.getMetaValue("color") ?: "")
+    override fun getColor(): String {
+        return group.cachedData.metaData.getMetaValue("color") ?: "WHITE"
     }
 
-    override fun getSuffix(): PrefixesNameElement<TextComponent> {
-        return PrefixesComponentNameElement((group.cachedData.metaData.suffix ?: "").replace("&", "§"))
+    override fun getSuffix(): Component {
+        return MiniMessageImpl.parse((group.cachedData.metaData.suffix ?: "").replace("&", "§"))
     }
 
     override fun getPriority(): Int {

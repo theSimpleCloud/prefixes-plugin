@@ -1,4 +1,4 @@
-package app.simplecloud.plugin.prefixes.shared
+package app.simplecloud.plugin.prefixes.spigot
 
 import app.simplecloud.plugin.prefixes.api.PrefixesScoreboard
 import org.bukkit.ChatColor
@@ -42,8 +42,7 @@ class PrefixesScoreboardBukkitImpl : PrefixesScoreboard<String, String> {
         team.suffix = suffix
     }
 
-    fun update(uniqueId: UUID, prefix: String, suffix: String, color: ChatColor)
-    {
+    fun update(uniqueId: UUID, prefix: String, suffix: String, color: ChatColor) {
         val team: Team = scoreboard.getTeam(uniqueId.toString()) ?: createTeamReturning(uniqueId) ?: return
         team.prefix = prefix
         team.suffix = suffix
@@ -60,11 +59,9 @@ class PrefixesScoreboardBukkitImpl : PrefixesScoreboard<String, String> {
         team.prefix = prefix
     }
 
-    fun updateColor(uniqueId: UUID, color: ChatColor)
-    {
+    fun updateColor(uniqueId: UUID, color: ChatColor) {
         val team: Team = scoreboard.getTeam(uniqueId.toString()) ?: createTeamReturning(uniqueId) ?: return
         team.color = color
     }
-
 
 }
