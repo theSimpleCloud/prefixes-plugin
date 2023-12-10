@@ -16,7 +16,7 @@ class LuckPermsGroup(private var group: Group, private var luckPerms: LuckPerms)
     }
 
     override fun getPrefix(): Component {
-        return MiniMessageImpl.parse((group.cachedData.metaData.prefix ?: "").replace("&", "§"))
+        return MiniMessageImpl.parse((group.cachedData.metaData.prefix ?: ""))
     }
 
     override fun getColor(): String {
@@ -24,7 +24,7 @@ class LuckPermsGroup(private var group: Group, private var luckPerms: LuckPerms)
     }
 
     override fun getSuffix(): Component {
-        return MiniMessageImpl.parse((group.cachedData.metaData.suffix ?: "").replace("&", "§"))
+        return MiniMessageImpl.parse((group.cachedData.metaData.suffix ?: ""))
     }
 
     override fun getPriority(): Int {

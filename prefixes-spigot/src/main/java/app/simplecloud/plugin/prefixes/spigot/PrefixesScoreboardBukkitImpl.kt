@@ -1,6 +1,7 @@
 package app.simplecloud.plugin.prefixes.spigot
 
 import app.simplecloud.plugin.prefixes.api.PrefixesScoreboard
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
@@ -18,6 +19,11 @@ class PrefixesScoreboardBukkitImpl : PrefixesScoreboard<String, String> {
 
     override fun createTeam(uniqueId: UUID) {
         createTeamReturning(uniqueId)
+    }
+
+    fun getTeam(uniqueId: UUID): Team?
+    {
+        return scoreboard.getEntryTeam(Bukkit.getPlayer(uniqueId)!!.name)
     }
 
     override fun remove(player: String) {
@@ -58,6 +64,7 @@ class PrefixesScoreboardBukkitImpl : PrefixesScoreboard<String, String> {
         val team: Team = scoreboard.getTeam(uniqueId.toString()) ?: createTeamReturning(uniqueId) ?: return
         team.prefix = prefix
     }
+
 
     fun updateColor(uniqueId: UUID, color: ChatColor) {
         val team: Team = scoreboard.getTeam(uniqueId.toString()) ?: createTeamReturning(uniqueId) ?: return

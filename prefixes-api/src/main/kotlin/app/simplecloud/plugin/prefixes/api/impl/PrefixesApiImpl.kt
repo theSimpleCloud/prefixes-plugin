@@ -2,15 +2,16 @@ package app.simplecloud.plugin.prefixes.api.impl
 
 import app.simplecloud.plugin.prefixes.api.PrefixesActor
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
+import app.simplecloud.plugin.prefixes.api.PrefixesConfig
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import java.util.*
 
 abstract class PrefixesApiImpl : PrefixesApi {
 
     private val groups: MutableList<PrefixesGroup> = mutableListOf()
     private var actor: PrefixesActor = PrefixesActorBlankImpl()
+    private lateinit var config: PrefixesConfig
 
     override fun getGroups(): MutableList<PrefixesGroup> {
         return groups
@@ -44,6 +45,18 @@ abstract class PrefixesApiImpl : PrefixesApi {
 
     override fun setSuffix(uniqueId: UUID, suffix: Component) {
         actor.setSuffix(uniqueId, suffix)
+    }
+
+    override fun setColor(uniqueId: UUID, color: String) {
+        actor.setColor(uniqueId, color)
+    }
+
+    override fun setConfig(config: PrefixesConfig) {
+        this.config = config
+    }
+
+    fun getConfig() : PrefixesConfig {
+        return config
     }
 
     abstract fun indexGroups()

@@ -54,6 +54,19 @@ interface PrefixesApi {
      * Changes the [PrefixesActor] of the server instance (e.g. to a bukkit actor)
      * @param actor
      */
-    fun setActor(actor: PrefixesActor);
+    fun setActor(actor: PrefixesActor)
+
+    /**
+     * Changes the Scoreboard Team color of the target player (Used in 1.12+ to make player names colorful)
+     * @param uniqueId UUID of the target player
+     * @param color Color string compatible with Bukkit ChatColor
+     */
+    fun setColor(uniqueId: UUID, color: String)
+
+    /**
+     * Sets the used PrefixesConfig
+     * @param config Specifies the new [PrefixesConfig]
+     */
+    fun setConfig(config: PrefixesConfig)
 
 }

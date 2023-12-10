@@ -20,6 +20,14 @@ class PrefixesActorBlankImpl : PrefixesActor {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
+    override fun setColor(target: UUID, color: String) {
+        throw NotImplementedError("You need to define a PrefixesActor to use this")
+    }
+
+    override fun formatMessage(target: UUID, format: String, message: String): Component {
+        throw NotImplementedError("You need to define a PrefixesActor to use this")
+    }
+
     override fun remove(target: UUID) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
