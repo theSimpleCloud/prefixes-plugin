@@ -30,6 +30,8 @@ allprojects {
     dependencies {
         compileOnly("net.luckperms:api:5.4")
         implementation("net.kyori:adventure-api:4.14.0")
+        implementation("com.google.code.gson:gson:2.10.1")
+        implementation("net.kyori:adventure-text-minimessage:4.14.0")
     }
 }
 
