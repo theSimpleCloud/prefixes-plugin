@@ -12,7 +12,7 @@ interface PrefixesActor {
 
     fun setColor(target: UUID, color: String)
 
-    fun formatMessage(target: UUID, format: String, message: String): Component
+    fun formatMessage(target: UUID, format: String, message: Component): Component
 
     fun remove(target: UUID)
 }

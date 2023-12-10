@@ -24,7 +24,7 @@ class PrefixesActorBlankImpl : PrefixesActor {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
-    override fun formatMessage(target: UUID, format: String, message: String): Component {
+    override fun formatMessage(target: UUID, format: String, message: Component): Component {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 

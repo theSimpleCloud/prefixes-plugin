@@ -1,17 +1,16 @@
-package app.simplecloud.plugin.prefixes.spigot
+package app.simplecloud.plugin.prefixes.paper
 
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
-import app.simplecloud.plugin.prefixes.shared.MiniMessageImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
-import net.kyori.adventure.text.minimessage.MiniMessage
+import app.simplecloud.plugin.prefixes.spigot.PrefixesApiSpigotImpl
+import io.papermc.paper.event.player.AsyncChatEvent
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.ServicePriority
@@ -22,13 +21,14 @@ import java.util.*
 class PrefixesPlugin : JavaPlugin(), Listener {
 
     private lateinit var prefixesApi: PrefixesApiSpigotImpl
-    private val scoreboard: PrefixesScoreboardSpigotImpl = PrefixesScoreboardSpigotImpl()
-    private val prefixesApiActor: PrefixesActorSpigotImpl = PrefixesActorSpigotImpl(scoreboard)
+    private val scoreboard: PrefixesScoreboardPaperImpl = PrefixesScoreboardPaperImpl()
+    private val prefixesApiActor: PrefixesActorPaperImpl = PrefixesActorPaperImpl(scoreboard)
 
     override fun onEnable() {
         val luckPermsProvider: RegisteredServiceProvider<LuckPerms> = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
         prefixesApi = PrefixesApiSpigotImpl(luckPerms)
+        scoreboard.setScoreboard(Bukkit.getScoreboardManager().mainScoreboard)
         prefixesApi.setActor(prefixesApiActor)
         prefixesApi.setConfig(PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(PrefixesConfigImpl::class.java, PrefixesConfigImpl()))
         saveResource("config.json", false)
@@ -39,16 +39,14 @@ class PrefixesPlugin : JavaPlugin(), Listener {
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        scoreboard.initScoreboard(Bukkit.getScoreboardManager()!!.mainScoreboard)
         val uniqueId: UUID = event.player.uniqueId
         val playerGroup: PrefixesGroup = prefixesApi.getHighestGroup(uniqueId)
         prefixesApi.setWholeName(uniqueId, playerGroup)
     }
-
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onChat(event: AsyncPlayerChatEvent)
+    fun onChat(event: AsyncChatEvent)
     {
-        event.format = LegacyComponentSerializerImpl.serialize(prefixesApi.formatChatMessage(event.player.uniqueId, prefixesApi.getConfig().getChatFormat(), MiniMessageImpl.parse(event.message)))
+        event.message(prefixesApi.formatChatMessage(event.player.uniqueId, prefixesApi.getConfig().getChatFormat(), event.message()))
     }
 
 

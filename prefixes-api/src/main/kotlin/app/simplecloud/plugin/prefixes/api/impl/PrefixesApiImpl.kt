@@ -59,6 +59,11 @@ abstract class PrefixesApiImpl : PrefixesApi {
         return config
     }
 
+    fun formatChatMessage(target: UUID, format: String, message: Component): Component
+    {
+        return actor.formatMessage(target, format, message)
+    }
+
     abstract fun indexGroups()
 
 }

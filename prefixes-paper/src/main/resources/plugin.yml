@@ -1,0 +1,5 @@
+name: SimpleCloud-Prefixes
+version: 1.0
+main: app.simplecloud.plugin.prefixes.spigot.PrefixesPlugin
+authors:
+  - SimpleCloud
