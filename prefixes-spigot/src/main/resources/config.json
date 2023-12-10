@@ -1,0 +1,3 @@
+{
+  "chatFormat": "<prefix><name_colored><suffix><gray>:</gray> <white><message></white>"
+}
