@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Team
 import java.util.*
 
-class PrefixesActorBukkitImpl(private var scoreboard: PrefixesScoreboardBukkitImpl) : PrefixesActor {
+class PrefixesActorSpigotImpl(private var scoreboard: PrefixesScoreboardSpigotImpl) : PrefixesActor {
     override fun applyGroup(
         target: UUID,
         group: PrefixesGroup

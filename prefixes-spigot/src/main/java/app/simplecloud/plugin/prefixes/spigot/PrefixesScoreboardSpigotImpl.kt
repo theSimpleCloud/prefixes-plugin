@@ -7,7 +7,7 @@ import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 import java.util.*
 
-class PrefixesScoreboardBukkitImpl : PrefixesScoreboard<String, String> {
+class PrefixesScoreboardSpigotImpl : PrefixesScoreboard<String, String> {
 
     private lateinit var scoreboard: Scoreboard
 

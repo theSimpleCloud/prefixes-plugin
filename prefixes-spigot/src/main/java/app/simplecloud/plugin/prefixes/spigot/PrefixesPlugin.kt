@@ -20,8 +20,8 @@ import java.util.*
 class PrefixesPlugin : JavaPlugin(), Listener {
 
     private lateinit var prefixesApi: PrefixesApiSpigotImpl
-    private val scoreboard: PrefixesScoreboardBukkitImpl = PrefixesScoreboardBukkitImpl()
-    private val prefixesApiActor: PrefixesActorBukkitImpl = PrefixesActorBukkitImpl(scoreboard)
+    private val scoreboard: PrefixesScoreboardSpigotImpl = PrefixesScoreboardSpigotImpl()
+    private val prefixesApiActor: PrefixesActorSpigotImpl = PrefixesActorSpigotImpl(scoreboard)
 
     override fun onEnable() {
         val luckPermsProvider: RegisteredServiceProvider<LuckPerms> = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
