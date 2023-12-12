@@ -49,7 +49,7 @@ When PrefixesApi is active, a bukkit service provider is registered containing t
 val prefixesApiProvider: RegisteredServiceProvider<PrefixesApi>? = Bukkit.getServicesManager().getRegisteredServiceProvider(PrefixesApi::class.java)
 if(prefixesApiProvider != null) {
     val myPrefixesApi: PrefixesApi = prefixesApiProvider.provider
-    //Code using the PrefixApi
+    //Code using the PrefixesApi
 }
 ````
 > **IMPORTANT**: To make sure everything works as expected, add `PrefixesApi` to your plugin.yml `depends` list.
@@ -58,6 +58,7 @@ if(prefixesApiProvider != null) {
 To get the `PrefixesApi` object on Minestom, you need to call the `getApi()` Singleton in the `PrefixesExtension` class.
 ````kotlin
 val myPrefixesApi: PrefixesApi = PrefixesExtension.getApi()
+//Code using the PrefixesApi
 ````
 > **IMPORTANT**: To make sure everything works as expected, add `PrefixesApi` to your extension.json `dependencies` array.
 
