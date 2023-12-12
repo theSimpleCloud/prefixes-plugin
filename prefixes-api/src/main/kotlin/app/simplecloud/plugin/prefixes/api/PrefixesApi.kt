@@ -59,7 +59,7 @@ interface PrefixesApi {
     /**
      * Changes the Scoreboard Team color of the target player (Used in 1.12+ to make player names colorful)
      * @param uniqueId UUID of the target player
-     * @param color Color string compatible with Bukkit ChatColor
+     * @param color Color string (ChatColor on spigot, hex colors on other server implementations)
      */
     fun setColor(uniqueId: UUID, color: String)
 
