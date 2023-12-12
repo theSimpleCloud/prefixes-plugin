@@ -1,9 +1,7 @@
 package app.simplecloud.plugin.prefixes.shared
 
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
-import app.simplecloud.plugin.prefixes.api.PrefixesNameElement
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.TextComponent
 import net.luckperms.api.LuckPerms
 import net.luckperms.api.model.group.Group
 import java.util.*
