@@ -18,7 +18,11 @@ class PrefixesActorSpigotImpl(private var scoreboard: PrefixesScoreboardSpigotIm
         group: PrefixesGroup
     ) {
         val player: Player = Bukkit.getPlayer(target) ?: return
-        scoreboard.update(target,LegacyComponentSerializerImpl.serialize(group.getPrefix()), LegacyComponentSerializerImpl.serialize(group.getSuffix()))
+        scoreboard.update(
+            target,
+            LegacyComponentSerializerImpl.serialize(group.getPrefix()),
+            LegacyComponentSerializerImpl.serialize(group.getSuffix())
+        )
         setColor(target, group.getColor())
         scoreboard.apply(target, player.name)
     }
@@ -39,13 +43,17 @@ class PrefixesActorSpigotImpl(private var scoreboard: PrefixesScoreboardSpigotIm
     override fun formatMessage(target: UUID, format: String, message: Component): Component {
         val team: Team? = scoreboard.getTeam(target)
         val tags = mutableListOf<TagResolver>()
-        if(team != null)
-        {
+        if (team != null) {
             tags.add(Placeholder.component("prefix", LegacyComponentSerializerImpl.deserialize(team.prefix)))
             tags.add(Placeholder.component("suffix", LegacyComponentSerializerImpl.deserialize(team.suffix)))
-            tags.add(Placeholder.component("name_colored", LegacyComponentSerializerImpl.deserialize(team.color.toString() + Bukkit.getPlayer(target)!!.name)))
+            tags.add(
+                Placeholder.component(
+                    "name_colored",
+                    LegacyComponentSerializerImpl.deserialize(team.color.toString() + Bukkit.getPlayer(target)!!.name)
+                )
+            )
             tags.add(Placeholder.component("name", Component.text(Bukkit.getPlayer(target)!!.name)))
-        }else{
+        } else {
             tags.add(Placeholder.unparsed("name", "%s"))
         }
         tags.add(Placeholder.component("message", message))

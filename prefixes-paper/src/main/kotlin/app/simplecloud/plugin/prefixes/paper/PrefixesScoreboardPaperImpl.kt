@@ -10,13 +10,12 @@ import java.util.*
 
 class PrefixesScoreboardPaperImpl : PrefixesScoreboard<Component, String> {
     private lateinit var scoreboard: Scoreboard
-    fun setScoreboard(scoreboard: Scoreboard)
-    {
+    fun setScoreboard(scoreboard: Scoreboard) {
         this.scoreboard = scoreboard
     }
 
     private fun createTeamReturning(uniqueId: UUID): Team? {
-        if(scoreboard.getTeam(uniqueId.toString()) == null)
+        if (scoreboard.getTeam(uniqueId.toString()) == null)
             return scoreboard.registerNewTeam(uniqueId.toString())
         return null
     }
@@ -31,8 +30,7 @@ class PrefixesScoreboardPaperImpl : PrefixesScoreboard<Component, String> {
         team.suffix(suffix)
     }
 
-    fun getTeam(uniqueId: UUID): Team?
-    {
+    fun getTeam(uniqueId: UUID): Team? {
         return scoreboard.getEntryTeam(Bukkit.getPlayer(uniqueId)!!.name)
     }
 

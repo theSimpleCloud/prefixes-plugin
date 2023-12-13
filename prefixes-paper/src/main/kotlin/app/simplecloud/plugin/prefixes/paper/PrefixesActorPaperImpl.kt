@@ -19,8 +19,10 @@ class PrefixesActorPaperImpl(private var scoreboard: PrefixesScoreboardPaperImpl
         group: PrefixesGroup
     ) {
         val player: Player = Bukkit.getPlayer(target) ?: return
-        scoreboard.update(target,
-            group.getPrefix(), group.getSuffix())
+        scoreboard.update(
+            target,
+            group.getPrefix(), group.getSuffix()
+        )
         setColor(target, group.getColor())
         scoreboard.apply(target, player.name)
     }
@@ -41,13 +43,17 @@ class PrefixesActorPaperImpl(private var scoreboard: PrefixesScoreboardPaperImpl
     override fun formatMessage(target: UUID, format: String, message: Component): Component {
         val team: Team? = scoreboard.getTeam(target)
         val tags = mutableListOf<TagResolver>()
-        if(team != null)
-        {
+        if (team != null) {
             tags.add(Placeholder.component("prefix", team.prefix()))
             tags.add(Placeholder.component("suffix", team.suffix()))
-            tags.add(Placeholder.component("name_colored", Component.text(Bukkit.getPlayer(target)!!.name).color(team.color())))
+            tags.add(
+                Placeholder.component(
+                    "name_colored",
+                    Component.text(Bukkit.getPlayer(target)!!.name).color(team.color())
+                )
+            )
             tags.add(Placeholder.component("name", Component.text(Bukkit.getPlayer(target)!!.name)))
-        }else{
+        } else {
             tags.add(Placeholder.unparsed("name", "%s"))
         }
         tags.add(Placeholder.component("message", message))

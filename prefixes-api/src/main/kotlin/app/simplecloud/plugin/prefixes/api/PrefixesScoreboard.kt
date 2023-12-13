@@ -1,6 +1,6 @@
 package app.simplecloud.plugin.prefixes.api
 
-import java.util.UUID
+import java.util.*
 
 interface PrefixesScoreboard<T, P> {
 

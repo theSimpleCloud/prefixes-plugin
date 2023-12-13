@@ -12,7 +12,7 @@ class PrefixesScoreboardMinestomImpl : PrefixesScoreboard<Component, String> {
     private val teamManager = MinecraftServer.getTeamManager()
 
     private fun createTeamReturning(uniqueId: UUID): Team? {
-        if(teamManager.getTeam(uniqueId.toString()) == null)
+        if (teamManager.getTeam(uniqueId.toString()) == null)
             return teamManager.createTeam(uniqueId.toString())
         return null
     }

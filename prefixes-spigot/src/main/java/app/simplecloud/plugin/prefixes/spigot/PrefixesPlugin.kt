@@ -26,11 +26,17 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     private val prefixesApiActor: PrefixesActorSpigotImpl = PrefixesActorSpigotImpl(scoreboard)
 
     override fun onEnable() {
-        val luckPermsProvider: RegisteredServiceProvider<LuckPerms> = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
+        val luckPermsProvider: RegisteredServiceProvider<LuckPerms> =
+            Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
         prefixesApi = PrefixesApiLuckPermsImpl(luckPerms)
         prefixesApi.setActor(prefixesApiActor)
-        prefixesApi.setConfig(PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(PrefixesConfigImpl::class.java, PrefixesConfigImpl()))
+        prefixesApi.setConfig(
+            PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(
+                PrefixesConfigImpl::class.java,
+                PrefixesConfigImpl()
+            )
+        )
         saveResource("config.json", false)
         prefixesApi.indexGroups()
         Bukkit.getPluginManager().registerEvents(this, this)
@@ -46,9 +52,14 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onChat(event: AsyncPlayerChatEvent)
-    {
-        event.format = LegacyComponentSerializerImpl.serialize(prefixesApi.formatChatMessage(event.player.uniqueId, prefixesApi.getConfig().getChatFormat(), MiniMessageImpl.parse(event.message)))
+    fun onChat(event: AsyncPlayerChatEvent) {
+        event.format = LegacyComponentSerializerImpl.serialize(
+            prefixesApi.formatChatMessage(
+                event.player.uniqueId,
+                prefixesApi.getConfig().getChatFormat(),
+                MiniMessageImpl.parse(event.message)
+            )
+        )
     }
 
 

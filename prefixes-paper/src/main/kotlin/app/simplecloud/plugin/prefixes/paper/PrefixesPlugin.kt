@@ -25,12 +25,18 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     private val prefixesApiActor: PrefixesActorPaperImpl = PrefixesActorPaperImpl(scoreboard)
 
     override fun onEnable() {
-        val luckPermsProvider: RegisteredServiceProvider<LuckPerms> = Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
+        val luckPermsProvider: RegisteredServiceProvider<LuckPerms> =
+            Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
         prefixesApi = PrefixesApiLuckPermsImpl(luckPerms)
         scoreboard.setScoreboard(Bukkit.getScoreboardManager().mainScoreboard)
         prefixesApi.setActor(prefixesApiActor)
-        prefixesApi.setConfig(PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(PrefixesConfigImpl::class.java, PrefixesConfigImpl()))
+        prefixesApi.setConfig(
+            PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(
+                PrefixesConfigImpl::class.java,
+                PrefixesConfigImpl()
+            )
+        )
         saveResource("config.json", false)
         prefixesApi.indexGroups()
         Bukkit.getPluginManager().registerEvents(this, this)
@@ -43,10 +49,16 @@ class PrefixesPlugin : JavaPlugin(), Listener {
         val playerGroup: PrefixesGroup = prefixesApi.getHighestGroup(uniqueId)
         prefixesApi.setWholeName(uniqueId, playerGroup)
     }
+
     @EventHandler(priority = EventPriority.LOWEST)
-    fun onChat(event: AsyncChatEvent)
-    {
-        event.message(prefixesApi.formatChatMessage(event.player.uniqueId, prefixesApi.getConfig().getChatFormat(), event.message()))
+    fun onChat(event: AsyncChatEvent) {
+        event.message(
+            prefixesApi.formatChatMessage(
+                event.player.uniqueId,
+                prefixesApi.getConfig().getChatFormat(),
+                event.message()
+            )
+        )
     }
 
 

@@ -3,7 +3,7 @@ package app.simplecloud.plugin.prefixes.api.impl
 import app.simplecloud.plugin.prefixes.api.PrefixesActor
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import net.kyori.adventure.text.Component
-import java.util.UUID
+import java.util.*
 
 class PrefixesActorBlankImpl : PrefixesActor {
 

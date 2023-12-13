@@ -1,7 +1,7 @@
 package app.simplecloud.plugin.prefixes.api
 
 import net.kyori.adventure.text.Component
-import java.util.UUID
+import java.util.*
 
 interface PrefixesActor {
     fun applyGroup(target: UUID, group: PrefixesGroup)

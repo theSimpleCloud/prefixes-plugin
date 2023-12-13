@@ -11,18 +11,16 @@ class PrefixesScoreboardSpigotImpl : PrefixesScoreboard<String, String> {
 
     private lateinit var scoreboard: Scoreboard
 
-    fun initScoreboard(scoreboard: Scoreboard)
-    {
-        if(!this::scoreboard.isInitialized)
-        this.scoreboard = scoreboard
+    fun initScoreboard(scoreboard: Scoreboard) {
+        if (!this::scoreboard.isInitialized)
+            this.scoreboard = scoreboard
     }
 
     override fun createTeam(uniqueId: UUID) {
         createTeamReturning(uniqueId)
     }
 
-    fun getTeam(uniqueId: UUID): Team?
-    {
+    fun getTeam(uniqueId: UUID): Team? {
         return scoreboard.getEntryTeam(Bukkit.getPlayer(uniqueId)!!.name)
     }
 
@@ -37,7 +35,7 @@ class PrefixesScoreboardSpigotImpl : PrefixesScoreboard<String, String> {
     }
 
     private fun createTeamReturning(uniqueId: UUID): Team? {
-        if(scoreboard.getTeam(uniqueId.toString()) == null)
+        if (scoreboard.getTeam(uniqueId.toString()) == null)
             return scoreboard.registerNewTeam(uniqueId.toString())
         return null
     }

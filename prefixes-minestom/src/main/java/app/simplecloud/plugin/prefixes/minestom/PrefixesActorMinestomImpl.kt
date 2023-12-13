@@ -19,8 +19,10 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesScoreboardMinest
         group: PrefixesGroup
     ) {
         val player: Player = MinecraftServer.getConnectionManager().getPlayer(target) ?: return
-        scoreboard.update(target,
-            group.getPrefix(), group.getSuffix())
+        scoreboard.update(
+            target,
+            group.getPrefix(), group.getSuffix()
+        )
         setColor(target, group.getColor())
         scoreboard.apply(target, player.username)
     }
@@ -41,13 +43,23 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesScoreboardMinest
     override fun formatMessage(target: UUID, format: String, message: Component): Component {
         val team: Team? = MinecraftServer.getTeamManager().getTeam(target.toString())
         val tags = mutableListOf<TagResolver>()
-        if(team != null)
-        {
+        if (team != null) {
             tags.add(Placeholder.component("prefix", team.prefix))
             tags.add(Placeholder.component("suffix", team.suffix))
-            tags.add(Placeholder.component("name_colored", Component.text(MinecraftServer.getConnectionManager().getPlayer(target)!!.username).color(team.teamColor)))
-            tags.add(Placeholder.component("name", Component.text(MinecraftServer.getConnectionManager().getPlayer(target)!!.username)))
-        }else{
+            tags.add(
+                Placeholder.component(
+                    "name_colored",
+                    Component.text(MinecraftServer.getConnectionManager().getPlayer(target)!!.username)
+                        .color(team.teamColor)
+                )
+            )
+            tags.add(
+                Placeholder.component(
+                    "name",
+                    Component.text(MinecraftServer.getConnectionManager().getPlayer(target)!!.username)
+                )
+            )
+        } else {
             tags.add(Placeholder.unparsed("name", "%s"))
         }
         tags.add(Placeholder.component("message", message))

@@ -32,11 +32,14 @@ abstract class PrefixesApiImpl : PrefixesApi {
     }
 
     override fun setWholeName(uniqueId: UUID, group: PrefixesGroup) {
-       actor.applyGroup(uniqueId, group)
+        actor.applyGroup(uniqueId, group)
     }
 
     override fun setWholeName(uniqueId: UUID, groupName: String) {
-        setWholeName(uniqueId, groups.stream().filter { group -> group.getName() == groupName }.findFirst().orElse(null))
+        setWholeName(
+            uniqueId,
+            groups.stream().filter { group -> group.getName() == groupName }.findFirst().orElse(null)
+        )
     }
 
     override fun setPrefix(uniqueId: UUID, prefix: Component) {
@@ -55,12 +58,11 @@ abstract class PrefixesApiImpl : PrefixesApi {
         this.config = config
     }
 
-    fun getConfig() : PrefixesConfig {
+    fun getConfig(): PrefixesConfig {
         return config
     }
 
-    fun formatChatMessage(target: UUID, format: String, message: Component): Component
-    {
+    fun formatChatMessage(target: UUID, format: String, message: Component): Component {
         return actor.formatMessage(target, format, message)
     }
 

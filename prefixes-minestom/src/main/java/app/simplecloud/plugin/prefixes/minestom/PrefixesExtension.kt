@@ -21,17 +21,21 @@ class PrefixesExtension : Extension() {
 
     companion object {
         private lateinit var prefixesApi: PrefixesApiImpl
-        fun getApi() : PrefixesApi
-        {
+        fun getApi(): PrefixesApi {
             return prefixesApi
         }
     }
+
     override fun initialize() {
 
         @Experimental
-        prefixesApi = PrefixesApiLuckPermsImpl(LPMinestomPlugin.getApi()) //! NO OFFICIAL LUCKPERMS SUPPORT RELEASED YET !
+        prefixesApi =
+            PrefixesApiLuckPermsImpl(LPMinestomPlugin.getApi()) //! NO OFFICIAL LUCKPERMS SUPPORT RELEASED YET !
         prefixesApi.setActor(PrefixesActorMinestomImpl(PrefixesScoreboardMinestomImpl()))
-        val config = PrefixesConfigParser<PrefixesConfigImpl>(File(dataDirectory.toFile(), "config.json")).parse(PrefixesConfigImpl::class.java, PrefixesConfigImpl())
+        val config = PrefixesConfigParser<PrefixesConfigImpl>(File(dataDirectory.toFile(), "config.json")).parse(
+            PrefixesConfigImpl::class.java,
+            PrefixesConfigImpl()
+        )
         savePackagedResource("config.json")
         prefixesApi.setConfig(config)
         prefixesApi.indexGroups()
@@ -41,7 +45,11 @@ class PrefixesExtension : Extension() {
         }
         MinecraftServer.getGlobalEventHandler().addListener(PlayerChatEvent::class.java) { event ->
             event.setChatFormat {
-                return@setChatFormat prefixesApi.formatChatMessage(event.player.uuid, prefixesApi.getConfig().getChatFormat(), MiniMessageImpl.parse(event.message))
+                return@setChatFormat prefixesApi.formatChatMessage(
+                    event.player.uuid,
+                    prefixesApi.getConfig().getChatFormat(),
+                    MiniMessageImpl.parse(event.message)
+                )
             }
         }
         MinecraftServer.LOGGER.info(Component.text("PrefixesApi initialized.").color(TextColor.color(0x7cf7ab)))
