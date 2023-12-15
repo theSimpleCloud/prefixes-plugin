@@ -1,0 +1,8 @@
+{
+  "entrypoint": "app.simplecloud.plugin.prefixes.minestom.PrefixesExtension",
+  "name": "PrefixesApi",
+  "version": "1.0",
+  "dependencies": [
+    "LuckPerms"
+  ]
+}

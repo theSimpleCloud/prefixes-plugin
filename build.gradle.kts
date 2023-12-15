@@ -18,10 +18,22 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots")
+        maven("https://oss.sonatype.org/content/repositories/central")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://jitpack.io")
     }
 
     kotlin {
         jvmToolchain(17)
+    }
+
+    dependencies {
+        compileOnly("net.luckperms:api:5.4")
+        implementation("net.kyori:adventure-api:4.14.0")
+        implementation("com.google.code.gson:gson:2.10.1")
+        implementation("net.kyori:adventure-text-minimessage:4.14.0")
     }
 }
 
