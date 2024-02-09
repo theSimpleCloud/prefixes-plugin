@@ -11,4 +11,4 @@ plugins {
 
 include("prefixes-api", "prefixes-minestom", "prefixes-paper", "prefixes-shared", "prefixes-spigot")
 
-rootProject.name = "Prefixes-Plugin"
+rootProject.name = "prefixes-plugin"
