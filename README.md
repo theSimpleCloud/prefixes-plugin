@@ -66,7 +66,7 @@ following code.
 
 ````kotlin
 val prefixesApiProvider: RegisteredServiceProvider<PrefixesApi>? = Bukkit.getServicesManager().getRegisteredServiceProvider(PrefixesApi::class.java)
-if(prefixesApiProvider != null) {
+if (prefixesApiProvider != null) {
     val myPrefixesApi: PrefixesApi = prefixesApiProvider.provider
     //Code using the PrefixesApi
 }
@@ -172,20 +172,23 @@ class MyPrefixesGroup : PrefixesGroup {
     override fun getName(): String {
         return "mygroup"
     }
-    override fun getPrefix(): Component
-    {
+
+    override fun getPrefix(): Component {
         return Component.text("")
     }
-    override fun getColor(): String
-    {
+
+    override fun getColor(): String {
         return "WHITE"
     }
+
     override fun getSuffix(): Component {
         return Component.text("")
     }
+
     override fun getPriority(): Int {
         return 0
     }
+
     override fun containsPlayer(uniqueId: UUID): Boolean {
         //Custom contains player logic
     }
