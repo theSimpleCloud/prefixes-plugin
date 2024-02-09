@@ -1,6 +1,6 @@
-# SimpleCloud PrefixesApi
+# SimpleCloud Prefixes Plugin
 
-Plugin/Extension that manages Prefixes and Suffixes in Tab, and formats the Chat to your
+Prefixes is a plugin/extension that manages prefixes and suffixes in tab, and formats the chat to your
 liking. [API methods](#api-usage) for doing this are also provided.
 You can [implement it on your own](#own-implementation), or use the default implementation
 for [LuckPerms](https://github.com/LuckPerms/LuckPerms).
@@ -19,7 +19,7 @@ implementation.
 
 ### LuckPerms
 
-PrefixesApi will automatically register any LuckPerms Group as a PrefixGroup, alongside its prefix, suffix, and
+Prefixes will automatically register any LuckPerms Group as a PrefixGroup, alongside its prefix, suffix, and
 TeamColor.
 
 #### Setting a groups prefix/suffix
@@ -61,12 +61,12 @@ There also are placeholders you can use for the format:
 
 #### Bukkit/Paper
 
-When PrefixesApi is active, a bukkit service provider is registered containing the Api object. To get it, use the
+When Prefixes is active, a bukkit service provider is registered containing the Api object. To get it, use the
 following code.
 
 ````kotlin
 val prefixesApiProvider: RegisteredServiceProvider<PrefixesApi>? = Bukkit.getServicesManager().getRegisteredServiceProvider(PrefixesApi::class.java)
-if(prefixesApiProvider != null) {
+if (prefixesApiProvider != null) {
     val myPrefixesApi: PrefixesApi = prefixesApiProvider.provider
     //Code using the PrefixesApi
 }
@@ -172,20 +172,23 @@ class MyPrefixesGroup : PrefixesGroup {
     override fun getName(): String {
         return "mygroup"
     }
-    override fun getPrefix(): Component
-    {
+
+    override fun getPrefix(): Component {
         return Component.text("")
     }
-    override fun getColor(): String
-    {
+
+    override fun getColor(): String {
         return "WHITE"
     }
+
     override fun getSuffix(): Component {
         return Component.text("")
     }
+
     override fun getPriority(): Int {
         return 0
     }
+
     override fun containsPlayer(uniqueId: UUID): Boolean {
         //Custom contains player logic
     }
