@@ -14,7 +14,7 @@ abstract class PrefixesApiImpl : PrefixesApi {
     private lateinit var config: PrefixesConfig
 
     override fun registerViewer(uniqueId: UUID) {
-        actor.registerViewer(uniqueId)
+        actor.registerViewer(uniqueId, this)
     }
     override fun getGroups(): MutableList<PrefixesGroup> {
         return groups

@@ -21,18 +21,6 @@ class PacketTeam(
     var suffix: Component?,
     var members: MutableList<Player> = mutableListOf()
 ) {
-    fun setPrefix(prefix: Component) {
-        this.prefix = prefix
-    }
-
-    fun setSuffix(suffix: Component) {
-        this.suffix = suffix
-    }
-
-    fun setColor(color: NamedTextColor?) {
-        this.color = color
-    }
-
     fun updateId(id: String): List<PacketContainer> {
         val toReturn = mutableListOf<PacketContainer>()
         toReturn.add(getTeamDeletePacket())
