@@ -13,6 +13,9 @@ abstract class PrefixesApiImpl : PrefixesApi {
     private var actor: PrefixesActor = PrefixesActorBlankImpl()
     private lateinit var config: PrefixesConfig
 
+    override fun registerViewer(uniqueId: UUID) {
+        actor.registerViewer(uniqueId)
+    }
     override fun getGroups(): MutableList<PrefixesGroup> {
         return groups
     }
@@ -31,27 +34,28 @@ abstract class PrefixesApiImpl : PrefixesApi {
         this.actor = actor
     }
 
-    override fun setWholeName(uniqueId: UUID, group: PrefixesGroup) {
-        actor.applyGroup(uniqueId, group)
+    override fun setWholeName(uniqueId: UUID, group: PrefixesGroup, vararg viewers: UUID) {
+        actor.applyGroup(uniqueId, group, *viewers)
     }
 
-    override fun setWholeName(uniqueId: UUID, groupName: String) {
+    override fun setWholeName(uniqueId: UUID, groupName: String, vararg viewers: UUID) {
         setWholeName(
             uniqueId,
-            groups.stream().filter { group -> group.getName() == groupName }.findFirst().orElse(null)
+            groups.stream().filter { group -> group.getName() == groupName }.findFirst().orElse(null),
+            *viewers
         )
     }
 
-    override fun setPrefix(uniqueId: UUID, prefix: Component) {
-        actor.setPrefix(uniqueId, prefix)
+    override fun setPrefix(uniqueId: UUID, prefix: Component, vararg viewers: UUID) {
+        actor.setPrefix(uniqueId, prefix, *viewers)
     }
 
-    override fun setSuffix(uniqueId: UUID, suffix: Component) {
-        actor.setSuffix(uniqueId, suffix)
+    override fun setSuffix(uniqueId: UUID, suffix: Component, vararg viewers: UUID) {
+        actor.setSuffix(uniqueId, suffix, *viewers)
     }
 
-    override fun setColor(uniqueId: UUID, color: String) {
-        actor.setColor(uniqueId, color)
+    override fun setColor(uniqueId: UUID, color: String, vararg viewers: UUID) {
+        actor.setColor(uniqueId, color, *viewers)
     }
 
     override fun setConfig(config: PrefixesConfig) {
@@ -62,8 +66,8 @@ abstract class PrefixesApiImpl : PrefixesApi {
         return config
     }
 
-    fun formatChatMessage(target: UUID, format: String, message: Component): Component {
-        return actor.formatMessage(target, format, message)
+    override fun formatChatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component {
+        return actor.formatMessage(target, viewer, format, message)
     }
 
     abstract fun indexGroups()

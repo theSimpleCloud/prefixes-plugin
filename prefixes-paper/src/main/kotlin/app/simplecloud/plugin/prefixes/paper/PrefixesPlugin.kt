@@ -5,7 +5,11 @@ import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesApiLuckPermsImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
+import app.simplecloud.plugin.prefixes.spigot.PrefixesActorSpigotImpl
+import app.simplecloud.plugin.prefixes.spigot.PrefixesGlobalDisplaySpigotImpl
+import com.comphenix.protocol.ProtocolLibrary
 import io.papermc.paper.event.player.AsyncChatEvent
+import net.kyori.adventure.identity.Identity
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -21,15 +25,15 @@ import java.util.*
 class PrefixesPlugin : JavaPlugin(), Listener {
 
     private lateinit var prefixesApi: PrefixesApiLuckPermsImpl
-    private val scoreboard: PrefixesScoreboardPaperImpl = PrefixesScoreboardPaperImpl()
-    private val prefixesApiActor: PrefixesActorPaperImpl = PrefixesActorPaperImpl(scoreboard)
+    private val scoreboard: PrefixesGlobalDisplaySpigotImpl = PrefixesGlobalDisplaySpigotImpl()
 
     override fun onEnable() {
+        val manager = ProtocolLibrary.getProtocolManager()
+        val prefixesApiActor = PrefixesActorSpigotImpl(manager, scoreboard)
         val luckPermsProvider: RegisteredServiceProvider<LuckPerms> =
             Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
         prefixesApi = PrefixesApiLuckPermsImpl(luckPerms)
-        scoreboard.setScoreboard(Bukkit.getScoreboardManager().mainScoreboard)
         prefixesApi.setActor(prefixesApiActor)
         prefixesApi.setConfig(
             PrefixesConfigParser<PrefixesConfigImpl>(File(dataFolder, "config.json")).parse(
@@ -52,13 +56,10 @@ class PrefixesPlugin : JavaPlugin(), Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     fun onChat(event: AsyncChatEvent) {
-        event.message(
-            prefixesApi.formatChatMessage(
-                event.player.uniqueId,
-                prefixesApi.getConfig().getChatFormat(),
-                event.message()
-            )
-        )
+        event.renderer { player, _, message, audience ->
+            val viewer = audience.getOrDefault(Identity.UUID, null) ?: return@renderer message
+            prefixesApi.formatChatMessage(player.uniqueId, viewer, prefixesApi.getConfig().getChatFormat(), message)
+        }
     }
 
 

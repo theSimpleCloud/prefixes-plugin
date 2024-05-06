@@ -6,6 +6,8 @@ import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
 import app.simplecloud.plugin.prefixes.shared.MiniMessageImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesApiLuckPermsImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
+import com.comphenix.protocol.ProtocolLib
+import com.comphenix.protocol.ProtocolLibrary
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
@@ -22,10 +24,11 @@ import java.util.*
 class PrefixesPlugin : JavaPlugin(), Listener {
 
     private lateinit var prefixesApi: PrefixesApiLuckPermsImpl
-    private val scoreboard: PrefixesScoreboardSpigotImpl = PrefixesScoreboardSpigotImpl()
-    private val prefixesApiActor: PrefixesActorSpigotImpl = PrefixesActorSpigotImpl(scoreboard)
+    private val scoreboard: PrefixesGlobalDisplaySpigotImpl = PrefixesGlobalDisplaySpigotImpl()
 
     override fun onEnable() {
+        val manager = ProtocolLibrary.getProtocolManager()
+        val prefixesApiActor = PrefixesActorSpigotImpl(manager, scoreboard)
         val luckPermsProvider: RegisteredServiceProvider<LuckPerms> =
             Bukkit.getServicesManager().getRegistration(LuckPerms::class.java) ?: return
         val luckPerms: LuckPerms = luckPermsProvider.provider
@@ -45,7 +48,6 @@ class PrefixesPlugin : JavaPlugin(), Listener {
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        scoreboard.initScoreboard(Bukkit.getScoreboardManager()!!.mainScoreboard)
         val uniqueId: UUID = event.player.uniqueId
         val playerGroup: PrefixesGroup = prefixesApi.getHighestGroup(uniqueId)
         prefixesApi.setWholeName(uniqueId, playerGroup)
@@ -55,6 +57,7 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     fun onChat(event: AsyncPlayerChatEvent) {
         event.format = LegacyComponentSerializerImpl.serialize(
             prefixesApi.formatChatMessage(
+                event.player.uniqueId,
                 event.player.uniqueId,
                 prefixesApi.getConfig().getChatFormat(),
                 MiniMessageImpl.parse(event.message)

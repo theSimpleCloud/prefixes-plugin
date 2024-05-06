@@ -17,8 +17,8 @@ class LuckPermsGroup(private var group: Group, private var luckPerms: LuckPerms)
         return MiniMessageImpl.parse((group.cachedData.metaData.prefix ?: ""))
     }
 
-    override fun getColor(): String {
-        return group.cachedData.metaData.getMetaValue("color") ?: "WHITE"
+    override fun getColor(): String? {
+        return group.cachedData.metaData.getMetaValue("color")
     }
 
     override fun getSuffix(): Component {

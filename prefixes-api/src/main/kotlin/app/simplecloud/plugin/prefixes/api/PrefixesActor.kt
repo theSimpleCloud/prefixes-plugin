@@ -4,15 +4,11 @@ import net.kyori.adventure.text.Component
 import java.util.*
 
 interface PrefixesActor {
-    fun applyGroup(target: UUID, group: PrefixesGroup)
-
-    fun setPrefix(target: UUID, prefix: Component)
-
-    fun setSuffix(target: UUID, suffix: Component)
-
-    fun setColor(target: UUID, color: String)
-
-    fun formatMessage(target: UUID, format: String, message: Component): Component
-
+    fun registerViewer(target: UUID, api: PrefixesApi)
+    fun applyGroup(target: UUID, group: PrefixesGroup, vararg viewers: UUID)
+    fun setPrefix(target: UUID, prefix: Component, vararg viewers: UUID)
+    fun setSuffix(target: UUID, suffix: Component, vararg viewers: UUID)
+    fun setColor(target: UUID, color: String, vararg viewers: UUID)
+    fun formatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component
     fun remove(target: UUID)
 }

@@ -31,7 +31,7 @@ class PrefixesExtension : Extension() {
         @Experimental
         prefixesApi =
             PrefixesApiLuckPermsImpl(LPMinestomPlugin.getApi()) //! NO OFFICIAL LUCKPERMS SUPPORT RELEASED YET !
-        prefixesApi.setActor(PrefixesActorMinestomImpl(PrefixesScoreboardMinestomImpl()))
+        prefixesApi.setActor(PrefixesActorMinestomImpl(PrefixesGlobalDisplayMinestomImpl()))
         val config = PrefixesConfigParser<PrefixesConfigImpl>(File(dataDirectory.toFile(), "config.json")).parse(
             PrefixesConfigImpl::class.java,
             PrefixesConfigImpl()
@@ -40,6 +40,7 @@ class PrefixesExtension : Extension() {
         prefixesApi.setConfig(config)
         prefixesApi.indexGroups()
         MinecraftServer.getGlobalEventHandler().addListener(AsyncPlayerConfigurationEvent::class.java) { event ->
+            prefixesApi.registerViewer(event.player.uuid)
             val prefixesGroup: PrefixesGroup = prefixesApi.getHighestGroup(event.player.uuid)
             prefixesApi.setWholeName(event.player.uuid, prefixesGroup)
         }
