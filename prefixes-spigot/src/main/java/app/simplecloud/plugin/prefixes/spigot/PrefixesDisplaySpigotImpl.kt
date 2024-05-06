@@ -110,10 +110,11 @@ class PrefixesDisplaySpigotImpl(
     }
 
     override fun update(id: String, prefix: Component, suffix: Component, priority: Int) {
+        val exists = getTeam(id) != null
         val team = updatePriority(id, priority) ?: createTeam(id, priority) ?: return
         team.prefix = prefix
         team.suffix = suffix
-        val packet = team.getTeamUpdatePacket(UpdateTeamMode.UPDATE)
+        val packet = team.getTeamUpdatePacket(if(exists) UpdateTeamMode.UPDATE else UpdateTeamMode.CREATE)
         viewers.forEach { viewer ->
             manager.sendServerPacket(viewer, packet)
         }

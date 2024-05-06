@@ -56,11 +56,13 @@ open class PrefixesGlobalDisplay<C, P, T> {
     }
     fun update(id: String, prefix: C, suffix: C, priority: Int, vararg players: UUID) {
         executeFor(players.toList()) {
+            println("updating")
             it.update(id, prefix, suffix, priority)
         }
     }
     fun addPlayer(id: String, player: P, vararg players: UUID) {
         executeFor(players.toList()) {
+            println("adding player")
             it.addPlayer(id, player)
         }
     }

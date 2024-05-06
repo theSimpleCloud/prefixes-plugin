@@ -50,6 +50,7 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     fun onJoin(event: PlayerJoinEvent) {
         val uniqueId: UUID = event.player.uniqueId
         val playerGroup: PrefixesGroup = prefixesApi.getHighestGroup(uniqueId)
+        prefixesApi.registerViewer(uniqueId)
         prefixesApi.setWholeName(uniqueId, playerGroup)
     }
 

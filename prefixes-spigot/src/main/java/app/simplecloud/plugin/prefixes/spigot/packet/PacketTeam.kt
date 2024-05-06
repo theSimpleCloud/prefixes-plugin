@@ -3,6 +3,7 @@ package app.simplecloud.plugin.prefixes.spigot.packet
 import WrappedScoreboardTeam
 import app.simplecloud.plugin.prefixes.spigot.LegacyComponentSerializerImpl
 import com.comphenix.protocol.PacketType
+import com.comphenix.protocol.events.InternalStructure
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.wrappers.EnumWrappers
 import com.comphenix.protocol.wrappers.PlayerInfoData
@@ -38,6 +39,8 @@ class PacketTeam(
             packet.integers.write(0, mode.getMode())
         }
 
+        println(optionals)
+
         if(mode == UpdateTeamMode.CREATE)
             packet.getSpecificModifier(Collection::class.java).write(0, members.map { it.name })
 
@@ -50,11 +53,9 @@ class PacketTeam(
         packet.chatComponents.writeSafely(1, LegacyComponentSerializerImpl.serializeToPacket(prefix ?: Component.text("")))
         packet.chatComponents.writeSafely(2, LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text("")))
 
-
-
+        //TODO: Make this work
         if(optionals.size() > 0) {
             val packetTeam = WrappedScoreboardTeam.fromHandle(optionals.read(0).get())
-
             packetTeam.displayName = WrappedChatComponent.fromText(id)
             packetTeam.prefix = LegacyComponentSerializerImpl.serializeToPacket(prefix ?: Component.text(""))
             packetTeam.suffix = LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text(""))

@@ -79,7 +79,7 @@ class PrefixesActorSpigotImpl(
                     LegacyComponentSerializerImpl.deserialize(team.color.toString() + Bukkit.getPlayer(target)!!.name)
                 )
             )
-            tags.add(Placeholder.component("name", Component.text(Bukkit.getPlayer(target)!!.name)))
+            tags.add(Placeholder.component("name", Component.text(Bukkit.getPlayer(target)!!.name).color(team.prefix?.color())))
         } else {
             tags.add(Placeholder.unparsed("name", "%s"))
         }
