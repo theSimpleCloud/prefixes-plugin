@@ -1,6 +1,7 @@
 package app.simplecloud.plugin.prefixes.minestom
 
 import app.simplecloud.plugin.prefixes.api.PrefixesActor
+import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.shared.MiniMessageImpl
 import net.kyori.adventure.text.Component
@@ -13,7 +14,7 @@ import net.minestom.server.entity.Player
 import java.util.*
 
 class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMinestomImpl) : PrefixesActor {
-    override fun registerViewer(target: UUID) {
+    override fun registerViewer(target: UUID, api: PrefixesApi) {
         scoreboard.register(target, PrefixesTablist())
     }
 
@@ -28,7 +29,8 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMin
             group.getPrefix(), group.getSuffix(), group.getPriority(),
             *viewers
         )
-        setColor(target, group.getColor())
+        if(group.getColor() != null)
+            setColor(target, group.getColor()!!)
         scoreboard.addPlayer(player.username, player)
     }
 

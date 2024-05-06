@@ -48,6 +48,7 @@ class PrefixesExtension : Extension() {
             event.setChatFormat {
                 return@setChatFormat prefixesApi.formatChatMessage(
                     event.player.uuid,
+                    event.player.uuid,
                     prefixesApi.getConfig().getChatFormat(),
                     MiniMessageImpl.parse(event.message)
                 )
