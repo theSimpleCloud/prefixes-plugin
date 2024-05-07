@@ -1,5 +1,5 @@
 name: PrefixesApi
 version: 1.0
-main: app.simplecloud.plugin.prefixes.spigot.PrefixesPlugin
+main: app.simplecloud.plugin.prefixes.paper.PrefixesPlugin
 authors:
   - dayyeeet

@@ -12,6 +12,18 @@ interface PrefixesApi {
     fun registerViewer(uniqueId: UUID)
 
     /**
+     * Returns if a viewer exists
+     * @param uniqueId UUID of the target player
+     */
+    fun hasViewer(uniqueId: UUID): Boolean
+
+    /**
+     * Removes a viewer
+     * @param uniqueId UUID of the target player
+     */
+    fun removeViewer(uniqueId: UUID)
+
+    /**
      * Sets the prefix and suffix of a player in both Tab and Chat
      * @param uniqueId UUID of the target player
      * @param group

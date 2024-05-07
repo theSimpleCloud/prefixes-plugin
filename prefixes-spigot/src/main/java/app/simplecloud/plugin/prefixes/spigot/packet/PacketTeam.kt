@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
+import java.util.EnumSet
 
 class PacketTeam(
     private var id: String,
@@ -38,9 +39,6 @@ class PacketTeam(
         }else if(packet.integers.size() > 0) {
             packet.integers.write(0, mode.getMode())
         }
-
-        println(optionals)
-
         if(mode == UpdateTeamMode.CREATE)
             packet.getSpecificModifier(Collection::class.java).write(0, members.map { it.name })
 
@@ -53,7 +51,6 @@ class PacketTeam(
         packet.chatComponents.writeSafely(1, LegacyComponentSerializerImpl.serializeToPacket(prefix ?: Component.text("")))
         packet.chatComponents.writeSafely(2, LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text("")))
 
-        //TODO: Make this work
         if(optionals.size() > 0) {
             val packetTeam = WrappedScoreboardTeam.fromHandle(optionals.read(0).get())
             packetTeam.displayName = WrappedChatComponent.fromText(id)
@@ -61,6 +58,7 @@ class PacketTeam(
             packetTeam.suffix = LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text(""))
             if(color != null)
                 packetTeam.teamColor = ChatColor.valueOf(color.toString().uppercase())
+            println(packetTeam.handle)
             optionals.write(0, Optional.of(packetTeam.handle))
         }
 
@@ -108,19 +106,18 @@ class PacketTeam(
     }
 
     fun getUpdateDisplayNamePacket(player: Player): PacketContainer {
-        val newName = LegacyComponentSerializerImpl.serializeToPacket(constructDisplayName(player))
         val packet = PacketContainer(PacketType.Play.Server.PLAYER_INFO)
-        packet.playerInfoAction.write(0, EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME)
+        packet.playerInfoActions.write(0, EnumSet.of(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME))
         val infoData = mutableListOf<PlayerInfoData>()
         val profile = WrappedGameProfile.fromPlayer(player)
-        infoData.add(PlayerInfoData(profile, 0, EnumWrappers.NativeGameMode.fromBukkit(player.gameMode), newName))
-        packet.playerInfoDataLists.write(0, infoData)
+        infoData.add(PlayerInfoData(profile, player.ping, EnumWrappers.NativeGameMode.fromBukkit(player.gameMode), LegacyComponentSerializerImpl.serializeToPacket(constructDisplayName(player))))
+        packet.playerInfoDataLists.write(1, infoData)
         return packet
     }
 
     private fun constructDisplayName(player: Player): Component {
-        if(!members.contains(player)) return Component.text("")
-        val base = if(prefix != null) Component.textOfChildren(prefix!!).append(Component.text(player.name)) else Component.text(player.name)
+        if(!members.contains(player)) return Component.text(player.name)
+        val base = if(prefix != null) prefix!!.append(Component.text(player.name)) else Component.text(player.name)
         if(suffix != null) base.append(suffix!!)
         return base
     }

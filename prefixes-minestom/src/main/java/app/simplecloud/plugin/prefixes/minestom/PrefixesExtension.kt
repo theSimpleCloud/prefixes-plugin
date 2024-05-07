@@ -14,6 +14,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent
 import net.minestom.server.event.player.PlayerChatEvent
+import net.minestom.server.event.player.PlayerDisconnectEvent
 import net.minestom.server.extensions.Extension
 import java.io.File
 
@@ -53,6 +54,10 @@ class PrefixesExtension : Extension() {
                     MiniMessageImpl.parse(event.message)
                 )
             }
+        }
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerDisconnectEvent::class.java) { event ->
+            prefixesApi.removeViewer(event.player.uuid)
         }
         MinecraftServer.LOGGER.info(Component.text("PrefixesApi initialized.").color(TextColor.color(0x7cf7ab)))
     }

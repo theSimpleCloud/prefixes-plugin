@@ -1,7 +1,6 @@
 package app.simplecloud.plugin.prefixes.paper
 
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
-import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesApiLuckPermsImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
@@ -15,12 +14,11 @@ import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.RegisteredServiceProvider
 import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
-import java.util.*
 
 class PrefixesPlugin : JavaPlugin(), Listener {
 
@@ -45,14 +43,12 @@ class PrefixesPlugin : JavaPlugin(), Listener {
         prefixesApi.indexGroups()
         Bukkit.getPluginManager().registerEvents(this, this)
         Bukkit.getServicesManager().register(PrefixesApi::class.java, prefixesApi, this, ServicePriority.Normal)
+        manager.addPacketListener(PlayerCreatePacketAdapter(this, prefixesApi))
     }
 
     @EventHandler
-    fun onJoin(event: PlayerJoinEvent) {
-        val uniqueId: UUID = event.player.uniqueId
-        prefixesApi.registerViewer(uniqueId)
-        val playerGroup: PrefixesGroup = prefixesApi.getHighestGroup(uniqueId)
-        prefixesApi.setWholeName(uniqueId, playerGroup)
+    fun onQuit(event: PlayerQuitEvent) {
+        prefixesApi.removeViewer(event.player.uniqueId)
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

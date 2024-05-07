@@ -2,13 +2,13 @@ package app.simplecloud.plugin.prefixes.spigot
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
+import net.md_5.bungee.chat.ComponentSerializer
 
 class LegacyComponentSerializerImpl {
     companion object {
         private val impl =
-            LegacyComponentSerializer.builder().hexColors().useUnusualXRepeatedCharacterHexFormat().character('§')
-                .hexCharacter('x').build()
+            GsonComponentSerializer.builder().build()
 
         fun deserialize(text: String): Component {
             return impl.deserialize(text)
@@ -19,7 +19,7 @@ class LegacyComponentSerializerImpl {
         }
 
         fun serializeToPacket(component: Component): WrappedChatComponent {
-            return WrappedChatComponent.fromText(serialize(component))
+            return WrappedChatComponent.fromJson(serialize(component))
         }
     }
 }

@@ -18,6 +18,17 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMin
         scoreboard.register(target, PrefixesTablist())
     }
 
+    override fun hasViewer(target: UUID): Boolean {
+        return scoreboard.getDisplay(target).orElse(null) != null
+    }
+
+    override fun removeViewer(target: UUID) {
+        val player = MinecraftServer.getConnectionManager().getPlayer(target) ?: return
+        val display = scoreboard.getDisplay(player.uuid).orElse(null) ?: return
+        display.removeViewer(player)
+        scoreboard.removeDisplay(player.uuid)
+    }
+
     override fun applyGroup(
         target: UUID,
         group: PrefixesGroup,

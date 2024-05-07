@@ -11,6 +11,14 @@ class PrefixesActorBlankImpl : PrefixesActor {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
+    override fun hasViewer(target: UUID): Boolean {
+        throw NotImplementedError("You need to define a PrefixesActor to use this")
+    }
+
+    override fun removeViewer(target: UUID) {
+        throw NotImplementedError("You need to define a PrefixesActor to use this")
+    }
+
     override fun applyGroup(target: UUID, group: PrefixesGroup, vararg viewers: UUID) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }

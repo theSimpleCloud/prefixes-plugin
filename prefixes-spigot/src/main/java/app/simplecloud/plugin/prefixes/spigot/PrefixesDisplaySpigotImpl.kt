@@ -69,7 +69,6 @@ class PrefixesDisplaySpigotImpl(
         val result = viewers.add(player)
         if (result) {
             teams.values.forEach { team ->
-                manager.sendServerPacket(player, team.getTeamUpdatePacket(UpdateTeamMode.CREATE))
                 team.getUpdateDisplayNamePackets().forEach { packet ->
                     manager.sendServerPacket(player, packet)
                 }
@@ -80,7 +79,7 @@ class PrefixesDisplaySpigotImpl(
 
     override fun setViewer(player: Player): Boolean {
         viewers.forEach { removeViewer(it) }
-        return viewers.add(player)
+        return addViewer(player)
     }
 
     override fun removePlayer(player: Player) {
@@ -88,8 +87,10 @@ class PrefixesDisplaySpigotImpl(
             if (it.value.members.contains(player)) {
                 it.value.members.remove(player)
                 val packet = it.value.getRemoveTeamMembersPacket(player)
+                val displayPacket = it.value.getUpdateDisplayNamePacket(player)
                 viewers.forEach { viewer ->
                     manager.sendServerPacket(viewer, packet)
+                    manager.sendServerPacket(viewer, displayPacket)
                 }
             }
         }
@@ -99,12 +100,10 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return
         if(!team.members.contains(player)) {
             team.members.add(player)
-            val packets = team.getUpdateTeamMembersPackets()
-            packets.forEach { packet ->
+            val displayPacket = team.getUpdateDisplayNamePacket(player)
                 viewers.forEach { viewer ->
-                    manager.sendServerPacket(viewer, packet)
+                    manager.sendServerPacket(viewer, displayPacket)
                 }
-            }
 
         }
     }
@@ -115,8 +114,12 @@ class PrefixesDisplaySpigotImpl(
         team.prefix = prefix
         team.suffix = suffix
         val packet = team.getTeamUpdatePacket(if(exists) UpdateTeamMode.UPDATE else UpdateTeamMode.CREATE)
+        val displayPackets = team.getUpdateDisplayNamePackets()
         viewers.forEach { viewer ->
             manager.sendServerPacket(viewer, packet)
+            displayPackets.forEach { display ->
+                manager.sendServerPacket(viewer, display)
+            }
         }
     }
 
@@ -124,8 +127,12 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return
         team.suffix = suffix
         val packet = team.getTeamUpdatePacket(UpdateTeamMode.UPDATE)
+        val displayPackets = team.getUpdateDisplayNamePackets()
         viewers.forEach { viewer ->
             manager.sendServerPacket(viewer, packet)
+            displayPackets.forEach { display ->
+                manager.sendServerPacket(viewer, display)
+            }
         }
     }
 
@@ -133,8 +140,12 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return
         team.prefix = prefix
         val packet = team.getTeamUpdatePacket(UpdateTeamMode.UPDATE)
+        val displayPackets = team.getUpdateDisplayNamePackets()
         viewers.forEach { viewer ->
             manager.sendServerPacket(viewer, packet)
+            displayPackets.forEach { display ->
+                manager.sendServerPacket(viewer, display)
+            }
         }
     }
 

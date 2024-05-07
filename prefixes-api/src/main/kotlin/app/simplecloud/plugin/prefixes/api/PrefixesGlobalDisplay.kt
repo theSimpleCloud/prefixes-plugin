@@ -22,6 +22,10 @@ open class PrefixesGlobalDisplay<C, P, T> {
         return Optional.ofNullable(displays.getOrDefault(player, null))
     }
 
+    fun removeDisplay(player: UUID) {
+        displays.remove(player)
+    }
+
     fun getDefaultDisplay(): PrefixesDisplay<C, P, T>? {
         return defaultDisplay
     }
@@ -40,6 +44,7 @@ open class PrefixesGlobalDisplay<C, P, T> {
         }
     }
     fun updatePrefix(id: String, prefix: C, vararg players: UUID) {
+        println(players.toList())
         executeFor(players.toList()) {
             it.updatePrefix(id, prefix)
         }
@@ -56,13 +61,11 @@ open class PrefixesGlobalDisplay<C, P, T> {
     }
     fun update(id: String, prefix: C, suffix: C, priority: Int, vararg players: UUID) {
         executeFor(players.toList()) {
-            println("updating")
             it.update(id, prefix, suffix, priority)
         }
     }
     fun addPlayer(id: String, player: P, vararg players: UUID) {
         executeFor(players.toList()) {
-            println("adding player")
             it.addPlayer(id, player)
         }
     }

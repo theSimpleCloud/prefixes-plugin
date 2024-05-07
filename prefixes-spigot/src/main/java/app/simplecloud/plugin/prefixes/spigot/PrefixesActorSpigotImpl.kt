@@ -22,14 +22,27 @@ class PrefixesActorSpigotImpl(
     private var scoreboard: PrefixesGlobalDisplaySpigotImpl
 ) : PrefixesActor {
     override fun registerViewer(target: UUID, api: PrefixesApi) {
+        val targetPlayer = Bukkit.getPlayer(target) ?: return
         val display = PrefixesDisplaySpigotImpl(manager)
         scoreboard.register(target, display)
+        display.setViewer(targetPlayer)
         Bukkit.getOnlinePlayers().forEach {  player ->
             if(player.uniqueId != target) {
                 val group = api.getHighestGroup(player.uniqueId)
                 applyGroup(player.uniqueId, group, target)
             }
         }
+    }
+
+    override fun hasViewer(target: UUID): Boolean {
+        return scoreboard.getDisplay(target).orElse(null) != null
+    }
+
+    override fun removeViewer(target: UUID) {
+        val player = Bukkit.getPlayer(target) ?: return
+        val display = scoreboard.getDisplay(target).orElse(null) ?: return
+        display.removeViewer(player)
+        scoreboard.removeDisplay(target)
     }
 
     override fun applyGroup(
@@ -76,12 +89,18 @@ class PrefixesActorSpigotImpl(
             tags.add(
                 Placeholder.component(
                     "name_colored",
-                    LegacyComponentSerializerImpl.deserialize(team.color.toString() + Bukkit.getPlayer(target)!!.name)
+                    Component.text(Bukkit.getPlayer(target)!!.name).color(team.color)
                 )
             )
-            tags.add(Placeholder.component("name", Component.text(Bukkit.getPlayer(target)!!.name).color(team.prefix?.color())))
+            tags.add(
+                Placeholder.component(
+                    "name_prefixed",
+                    (team.prefix ?: Component.text("")).append(Component.text(targetPlayer.name))
+                )
+            )
+            tags.add(Placeholder.unparsed("name", targetPlayer.name))
         } else {
-            tags.add(Placeholder.unparsed("name", "%s"))
+            tags.add(Placeholder.unparsed("name", targetPlayer.name))
         }
         tags.add(Placeholder.component("message", message))
         return MiniMessageImpl.parse(format, tags)

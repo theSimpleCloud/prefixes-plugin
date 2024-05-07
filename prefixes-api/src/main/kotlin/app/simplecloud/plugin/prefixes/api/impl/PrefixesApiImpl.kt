@@ -16,6 +16,15 @@ abstract class PrefixesApiImpl : PrefixesApi {
     override fun registerViewer(uniqueId: UUID) {
         actor.registerViewer(uniqueId, this)
     }
+
+    override fun hasViewer(uniqueId: UUID): Boolean {
+        return actor.hasViewer(uniqueId)
+    }
+
+    override fun removeViewer(uniqueId: UUID) {
+        actor.removeViewer(uniqueId)
+    }
+
     override fun getGroups(): MutableList<PrefixesGroup> {
         return groups
     }
