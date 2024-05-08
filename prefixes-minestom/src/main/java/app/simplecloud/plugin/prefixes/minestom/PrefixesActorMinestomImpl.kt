@@ -60,9 +60,9 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMin
         scoreboard.updateSuffix(player.username, suffix)
     }
 
-    override fun formatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component {
+    override fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
         val targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target) ?: return message
-        val display = scoreboard.getDisplay(viewer).orElse(null) ?: return message
+        val display = if(viewer != null) scoreboard.getDisplay(viewer).orElse(scoreboard.getDefaultDisplay()) else scoreboard.getDefaultDisplay() ?: return message
         val team = display.getTeam(targetPlayer.username)
         val tags = mutableListOf<TagResolver>()
         if (team != null) {

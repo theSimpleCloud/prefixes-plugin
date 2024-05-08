@@ -21,6 +21,11 @@ class PrefixesActorSpigotImpl(
     private var manager: ProtocolManager,
     private var scoreboard: PrefixesGlobalDisplaySpigotImpl
 ) : PrefixesActor {
+
+    init {
+        scoreboard.setDefaultDisplay(PrefixesDisplaySpigotImpl(manager))
+    }
+
     override fun registerViewer(target: UUID, api: PrefixesApi) {
         val targetPlayer = Bukkit.getPlayer(target) ?: return
         val display = PrefixesDisplaySpigotImpl(manager)
@@ -78,8 +83,8 @@ class PrefixesActorSpigotImpl(
         scoreboard.updatePrefix(player.name, suffix, *viewers)
     }
 
-    override fun formatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component {
-        val display = scoreboard.getDisplay(viewer).orElseGet { scoreboard.getDefaultDisplay() }
+    override fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
+        val display = if(viewer != null) scoreboard.getDisplay(viewer).orElseGet { scoreboard.getDefaultDisplay() } else scoreboard.getDefaultDisplay() ?: return message
         val targetPlayer = Bukkit.getPlayer(target) ?: return message
         val team: PacketTeam? = display.getTeam(targetPlayer.name)
         val tags = mutableListOf<TagResolver>()
@@ -92,12 +97,6 @@ class PrefixesActorSpigotImpl(
                     Component.text(Bukkit.getPlayer(target)!!.name).color(team.color)
                 )
             )
-            tags.add(
-                Placeholder.component(
-                    "name_prefixed",
-                    (team.prefix ?: Component.text("")).append(Component.text(targetPlayer.name))
-                )
-            )
             tags.add(Placeholder.unparsed("name", targetPlayer.name))
         } else {
             tags.add(Placeholder.unparsed("name", targetPlayer.name))
@@ -108,6 +107,6 @@ class PrefixesActorSpigotImpl(
 
     override fun setColor(target: UUID, color: String, vararg viewers: UUID) {
         val player = Bukkit.getPlayer(target) ?: return
-        scoreboard.updateColor(player.name, NamedTextColor.nearestTo(TextColor.fromHexString(color) ?: NamedTextColor.GRAY), *viewers)
+        scoreboard.updateColor(player.name, TextColor.fromHexString(color) ?: NamedTextColor.GRAY, *viewers)
     }
 }

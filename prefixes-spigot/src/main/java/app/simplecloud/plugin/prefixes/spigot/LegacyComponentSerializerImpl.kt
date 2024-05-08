@@ -4,6 +4,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import net.md_5.bungee.chat.ComponentSerializer
+import net.minecraft.MinecraftVersion
 
 class LegacyComponentSerializerImpl {
     companion object {

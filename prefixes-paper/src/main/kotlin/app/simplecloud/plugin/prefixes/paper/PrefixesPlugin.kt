@@ -54,7 +54,7 @@ class PrefixesPlugin : JavaPlugin(), Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     fun onChat(event: AsyncChatEvent) {
         event.renderer { player, _, message, audience ->
-            val viewer = audience.getOrDefault(Identity.UUID, null) ?: return@renderer message
+            val viewer = audience.getOrDefault(Identity.UUID, null)
             prefixesApi.formatChatMessage(player.uniqueId, viewer, prefixesApi.getConfig().getChatFormat(), message)
         }
     }

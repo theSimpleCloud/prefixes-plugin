@@ -1,6 +1,7 @@
 package app.simplecloud.plugin.prefixes.api
 
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 
 interface PrefixesDisplay<C, P, T> {
     fun createTeam(id: String, priority: Int = 0): T?
@@ -10,7 +11,7 @@ interface PrefixesDisplay<C, P, T> {
     fun updateSuffix(id: String, suffix: C)
 
     fun updatePriority(id: String, priority: Int): T?
-    fun updateColor(id: String, color: NamedTextColor)
+    fun updateColor(id: String, color: TextColor)
     fun update(id: String, prefix: C, suffix: C, priority: Int)
 
     fun toPriorityString(priority: Int): String {

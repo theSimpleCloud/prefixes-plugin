@@ -99,6 +99,6 @@ interface PrefixesApi {
      * @param format the chat format the message should follow
      * @param message Message sent by the [target]
      */
-    fun formatChatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component
+    fun formatChatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component
 
 }

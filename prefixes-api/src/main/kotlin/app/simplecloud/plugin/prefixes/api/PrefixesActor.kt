@@ -11,6 +11,6 @@ interface PrefixesActor {
     fun setPrefix(target: UUID, prefix: Component, vararg viewers: UUID)
     fun setSuffix(target: UUID, suffix: Component, vararg viewers: UUID)
     fun setColor(target: UUID, color: String, vararg viewers: UUID)
-    fun formatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component
+    fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component
     fun remove(target: UUID)
 }

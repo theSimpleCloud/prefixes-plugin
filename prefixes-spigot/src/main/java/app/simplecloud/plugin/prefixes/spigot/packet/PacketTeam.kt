@@ -1,24 +1,22 @@
 package app.simplecloud.plugin.prefixes.spigot.packet
 
-import WrappedScoreboardTeam
 import app.simplecloud.plugin.prefixes.spigot.LegacyComponentSerializerImpl
 import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.events.InternalStructure
 import com.comphenix.protocol.events.PacketContainer
+import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.wrappers.EnumWrappers
 import com.comphenix.protocol.wrappers.PlayerInfoData
-import com.comphenix.protocol.wrappers.WrappedChatComponent
 import com.comphenix.protocol.wrappers.WrappedGameProfile
-import com.google.common.base.Optional
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
-import java.util.EnumSet
+import java.util.*
 
 class PacketTeam(
     private var id: String,
-    var color: NamedTextColor?,
+    var color: TextColor?,
     var prefix: Component?,
     var suffix: Component?,
     var members: MutableList<Player> = mutableListOf()
@@ -33,35 +31,18 @@ class PacketTeam(
 
     fun getTeamUpdatePacket(mode: UpdateTeamMode): PacketContainer {
         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-        val optionals = packet.modifier.withType<Optional<Any>>(Optional::class.java)
-        if(packet.integers.size() > 1) {
-            packet.integers.write(1, mode.getMode())
-        }else if(packet.integers.size() > 0) {
-            packet.integers.write(0, mode.getMode())
-        }
+        packet.integers.write(0, mode.getMode())
         if(mode == UpdateTeamMode.CREATE)
             packet.getSpecificModifier(Collection::class.java).write(0, members.map { it.name })
 
-        packet.strings.writeSafely(0, id)
-        packet.strings.writeSafely(1, id)
-        if(prefix != null) packet.strings.writeSafely(2, LegacyComponentSerializerImpl.serialize(prefix!!))
-        if(suffix != null) packet.strings.writeSafely(3, LegacyComponentSerializerImpl.serialize(suffix!!))
-
-        packet.chatComponents.writeSafely(0, WrappedChatComponent.fromText(id))
-        packet.chatComponents.writeSafely(1, LegacyComponentSerializerImpl.serializeToPacket(prefix ?: Component.text("")))
-        packet.chatComponents.writeSafely(2, LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text("")))
-
-        if(optionals.size() > 0) {
-            val packetTeam = WrappedScoreboardTeam.fromHandle(optionals.read(0).get())
-            packetTeam.displayName = WrappedChatComponent.fromText(id)
-            packetTeam.prefix = LegacyComponentSerializerImpl.serializeToPacket(prefix ?: Component.text(""))
-            packetTeam.suffix = LegacyComponentSerializerImpl.serializeToPacket(suffix ?: Component.text(""))
-            if(color != null)
-                packetTeam.teamColor = ChatColor.valueOf(color.toString().uppercase())
-            println(packetTeam.handle)
-            optionals.write(0, Optional.of(packetTeam.handle))
+        packet.strings.write(0, id)
+        if(packet.optionalStructures.size() > 0) {
+            val optional = packet.optionalStructures.read(0).get()
+            if(prefix != null) optional.chatComponents.write(1, LegacyComponentSerializerImpl.serializeToPacket(prefix!!))
+            if(suffix != null) optional.chatComponents.write(2, LegacyComponentSerializerImpl.serializeToPacket(suffix!!))
+            optional.getEnumModifier(ChatColor::class.java, MinecraftReflection.getMinecraftClass("EnumChatFormat")).write(0, if(color != null) ChatColor.valueOf(NamedTextColor.nearestTo(color!!).toString().uppercase()) else ChatColor.GRAY)
+            packet.optionalStructures.write(0, Optional.of(optional))
         }
-
         return packet
     }
     fun getTeamDeletePacket(): PacketContainer {
@@ -90,6 +71,21 @@ class PacketTeam(
         packet.getSpecificModifier(Collection::class.java).write(0, members.map { it.name })
         return packet
     }
+
+    fun getAddTeamMemberPacket(player: Player): PacketContainer {
+        val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
+        if(packet.integers.size() > 1) {
+            packet.integers.write(1, 3)
+        }else if(packet.integers.size() > 0) {
+            packet.integers.write(0, 3)
+        }
+        packet.strings.write(0, id)
+        packet.getSpecificModifier(Collection::class.java).write(0, listOf(player.name))
+        return packet
+    }
+
+
+
     fun getRemoveTeamMembersPacket(vararg player: Player): PacketContainer {
         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
         if(packet.integers.size() > 1) {
@@ -117,7 +113,7 @@ class PacketTeam(
 
     private fun constructDisplayName(player: Player): Component {
         if(!members.contains(player)) return Component.text(player.name)
-        val base = if(prefix != null) prefix!!.append(Component.text(player.name)) else Component.text(player.name)
+        val base = if(prefix != null) prefix!!.append(Component.text(player.name).color(color)) else Component.text(player.name)
         if(suffix != null) base.append(suffix!!)
         return base
     }

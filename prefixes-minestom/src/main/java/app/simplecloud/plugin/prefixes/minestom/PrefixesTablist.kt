@@ -3,6 +3,7 @@ package app.simplecloud.plugin.prefixes.minestom
 import app.simplecloud.plugin.prefixes.api.PrefixesDisplay
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import net.minestom.server.MinecraftServer
 import net.minestom.server.entity.Player
 import net.minestom.server.network.packet.server.play.PlayerInfoUpdatePacket
@@ -13,6 +14,7 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
 
     private val teams = mutableListOf<Team>()
     private val viewers = mutableSetOf<Player>()
+    private var color: TextColor = NamedTextColor.GRAY
     override fun addViewer(player: Player): Boolean {
         val result = viewers.add(player)
         if (result) {
@@ -72,9 +74,10 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
         return newTeam
     }
 
-    override fun updateColor(id: String, color: NamedTextColor) {
+    override fun updateColor(id: String, color: TextColor) {
         val team = getTeam(id) ?: return
-        team.teamColor = color
+        team.teamColor = NamedTextColor.nearestTo(color)
+        this.color = color
         render(team)
     }
 
@@ -125,7 +128,7 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
                 true,
                 player.latency,
                 player.gameMode,
-                team.prefix.append(Component.text(player.username)).append(team.suffix),
+                team.prefix.append(Component.text(player.username).color(color)).append(team.suffix),
                 null
             )
         )

@@ -1,6 +1,7 @@
 package app.simplecloud.plugin.prefixes.api
 
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import java.util.Optional
 import java.util.UUID
 
@@ -16,6 +17,8 @@ open class PrefixesGlobalDisplay<C, P, T> {
         displays.filter { players.isEmpty() || players.contains(it.key) }.forEach { display ->
             action(display.value)
         }
+        if(players.isEmpty())
+            defaultDisplay?.let { action(it) }
     }
 
     fun getDisplay(player: UUID): Optional<PrefixesDisplay<C, P, T>> {
@@ -44,7 +47,6 @@ open class PrefixesGlobalDisplay<C, P, T> {
         }
     }
     fun updatePrefix(id: String, prefix: C, vararg players: UUID) {
-        println(players.toList())
         executeFor(players.toList()) {
             it.updatePrefix(id, prefix)
         }
@@ -75,7 +77,7 @@ open class PrefixesGlobalDisplay<C, P, T> {
         }
     }
 
-    fun updateColor(id: String, color: NamedTextColor, vararg players: UUID) {
+    fun updateColor(id: String, color: TextColor, vararg players: UUID) {
         executeFor(players.toList()) {
             it.updateColor(id, color)
         }

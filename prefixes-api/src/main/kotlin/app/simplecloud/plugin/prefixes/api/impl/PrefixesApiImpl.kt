@@ -75,7 +75,7 @@ abstract class PrefixesApiImpl : PrefixesApi {
         return config
     }
 
-    override fun formatChatMessage(target: UUID, viewer: UUID, format: String, message: Component): Component {
+    override fun formatChatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
         return actor.formatMessage(target, viewer, format, message)
     }
 

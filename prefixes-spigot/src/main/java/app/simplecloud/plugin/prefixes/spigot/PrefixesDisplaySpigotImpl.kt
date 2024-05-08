@@ -6,6 +6,8 @@ import app.simplecloud.plugin.prefixes.spigot.packet.UpdateTeamMode
 import com.comphenix.protocol.ProtocolManager
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam
 import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Team
 import org.checkerframework.checker.units.qual.C
@@ -42,7 +44,7 @@ class PrefixesDisplaySpigotImpl(
         return team
     }
 
-    override fun updateColor(id: String, color: NamedTextColor) {
+    override fun updateColor(id: String, color: TextColor) {
         val team = getTeam(id) ?: return
         team.color = color
         val packet = team.getTeamUpdatePacket(UpdateTeamMode.UPDATE)
@@ -100,8 +102,10 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return
         if(!team.members.contains(player)) {
             team.members.add(player)
+            val packet = team.getAddTeamMemberPacket(player)
             val displayPacket = team.getUpdateDisplayNamePacket(player)
                 viewers.forEach { viewer ->
+                    manager.sendServerPacket(viewer, packet)
                     manager.sendServerPacket(viewer, displayPacket)
                 }
 
