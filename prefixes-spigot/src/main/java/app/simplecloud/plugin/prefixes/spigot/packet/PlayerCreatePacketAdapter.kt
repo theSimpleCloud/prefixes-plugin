@@ -1,4 +1,4 @@
-package app.simplecloud.plugin.prefixes.paper
+package app.simplecloud.plugin.prefixes.spigot.packet
 
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup

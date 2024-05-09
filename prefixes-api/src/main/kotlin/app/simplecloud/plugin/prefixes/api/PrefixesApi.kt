@@ -95,7 +95,7 @@ interface PrefixesApi {
     /**
      * Returns a formatted chat message of the target player that will be sent to the viewer
      * @param target UUID of the target player
-     * @param viewer UUID of the viewing player
+     * @param viewer UUID of the viewing player (if null, only default prefix and suffix of the players group will be shown)
      * @param format the chat format the message should follow
      * @param message Message sent by the [target]
      */

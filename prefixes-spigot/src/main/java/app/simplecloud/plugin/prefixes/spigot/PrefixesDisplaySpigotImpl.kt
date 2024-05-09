@@ -3,14 +3,11 @@ package app.simplecloud.plugin.prefixes.spigot
 import app.simplecloud.plugin.prefixes.api.PrefixesDisplay
 import app.simplecloud.plugin.prefixes.spigot.packet.PacketTeam
 import app.simplecloud.plugin.prefixes.spigot.packet.UpdateTeamMode
+import app.simplecloud.plugin.prefixes.spigot.packet.UpdateTeamPlayersMode
 import com.comphenix.protocol.ProtocolManager
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam
 import org.bukkit.entity.Player
-import org.bukkit.scoreboard.Team
-import org.checkerframework.checker.units.qual.C
 
 class PrefixesDisplaySpigotImpl(
     private val manager: ProtocolManager
@@ -20,11 +17,11 @@ class PrefixesDisplaySpigotImpl(
     private val viewers: MutableSet<Player> = mutableSetOf()
 
     override fun createTeam(id: String, priority: Int): PacketTeam? {
-        if (getTeam(id) != null) return null;
+        if (getTeam(id) != null) return null
         val name = "${toPriorityString(priority)}$id"
-        val team = PacketTeam(name, null, null, null, mutableListOf())
+        val team = PacketTeam.create(name, null, null, null, mutableListOf())
         teams[name] = team
-        return team;
+        return team
     }
 
     override fun getTeam(id: String): PacketTeam? {
@@ -35,7 +32,7 @@ class PrefixesDisplaySpigotImpl(
         val newId = "${toPriorityString(priority)}$id"
         if(teams.containsKey(newId)) return null
         val team = getTeam(id) ?: return null
-        val packets = team.updateId(newId)
+        val packets = team.getUpdateIdPackets(newId)
         viewers.forEach { viewer ->
             packets.forEach { packet ->
                 manager.sendServerPacket(viewer, packet)
@@ -88,7 +85,7 @@ class PrefixesDisplaySpigotImpl(
         teams.forEach {
             if (it.value.members.contains(player)) {
                 it.value.members.remove(player)
-                val packet = it.value.getRemoveTeamMembersPacket(player)
+                val packet = it.value.getModifyTeamMembersPacket(UpdateTeamPlayersMode.REMOVE, listOf(player))
                 val displayPacket = it.value.getUpdateDisplayNamePacket(player)
                 viewers.forEach { viewer ->
                     manager.sendServerPacket(viewer, packet)
@@ -102,7 +99,7 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return
         if(!team.members.contains(player)) {
             team.members.add(player)
-            val packet = team.getAddTeamMemberPacket(player)
+            val packet = team.getModifyTeamMembersPacket(UpdateTeamPlayersMode.ADD, listOf(player))
             val displayPacket = team.getUpdateDisplayNamePacket(player)
                 viewers.forEach { viewer ->
                     manager.sendServerPacket(viewer, packet)
