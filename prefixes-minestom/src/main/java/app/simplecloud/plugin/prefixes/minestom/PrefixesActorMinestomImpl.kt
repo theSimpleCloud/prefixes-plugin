@@ -40,7 +40,7 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMin
             group.getPrefix(), group.getSuffix(), group.getPriority(),
             *viewers
         )
-        if(group.getColor() != null)
+        if (group.getColor() != null)
             setColor(target, group.getColor()!!)
         scoreboard.addPlayer(player.username, player)
     }
@@ -62,7 +62,8 @@ class PrefixesActorMinestomImpl(private var scoreboard: PrefixesGlobalDisplayMin
 
     override fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
         val targetPlayer = MinecraftServer.getConnectionManager().getPlayer(target) ?: return message
-        val display = if(viewer != null) scoreboard.getDisplay(viewer).orElse(scoreboard.getDefaultDisplay()) else scoreboard.getDefaultDisplay() ?: return message
+        val display = if (viewer != null) scoreboard.getDisplay(viewer)
+            .orElse(scoreboard.getDefaultDisplay()) else scoreboard.getDefaultDisplay() ?: return message
         val team = display.getTeam(targetPlayer.username)
         val tags = mutableListOf<TagResolver>()
         if (team != null) {

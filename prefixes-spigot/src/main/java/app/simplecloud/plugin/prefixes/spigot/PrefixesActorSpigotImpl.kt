@@ -29,8 +29,8 @@ class PrefixesActorSpigotImpl(
         val display = PrefixesDisplaySpigotImpl(manager)
         scoreboard.register(target, display)
         display.setViewer(targetPlayer)
-        Bukkit.getOnlinePlayers().forEach {  player ->
-            if(player.uniqueId != target) {
+        Bukkit.getOnlinePlayers().forEach { player ->
+            if (player.uniqueId != target) {
                 val group = api.getHighestGroup(player.uniqueId)
                 applyGroup(player.uniqueId, group, target)
             }
@@ -61,7 +61,7 @@ class PrefixesActorSpigotImpl(
             group.getPriority(),
             *viewers
         )
-        if(group.getColor() != null)
+        if (group.getColor() != null)
             setColor(target, group.getColor()!!, *viewers)
         scoreboard.addPlayer(player.name, player, *viewers)
     }
@@ -82,7 +82,8 @@ class PrefixesActorSpigotImpl(
     }
 
     override fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
-        val display = if(viewer != null) scoreboard.getDisplay(viewer).orElseGet { scoreboard.getDefaultDisplay() } else scoreboard.getDefaultDisplay() ?: return message
+        val display = if (viewer != null) scoreboard.getDisplay(viewer)
+            .orElseGet { scoreboard.getDefaultDisplay() } else scoreboard.getDefaultDisplay() ?: return message
         val targetPlayer = Bukkit.getPlayer(target) ?: return message
         val team: PacketTeam? = display.getTeam(targetPlayer.name)
         val tags = mutableListOf<TagResolver>()

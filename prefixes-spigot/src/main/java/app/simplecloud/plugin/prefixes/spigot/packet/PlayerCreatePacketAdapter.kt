@@ -8,12 +8,14 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import org.bukkit.plugin.Plugin
 
-class PlayerCreatePacketAdapter(plugin: Plugin, private val api: PrefixesApi): PacketAdapter(plugin,
+class PlayerCreatePacketAdapter(plugin: Plugin, private val api: PrefixesApi) : PacketAdapter(
+    plugin,
     ListenerPriority.NORMAL,
-    PacketType.Play.Client.CHAT_SESSION_UPDATE) {
+    PacketType.Play.Client.CHAT_SESSION_UPDATE
+) {
 
     override fun onPacketReceiving(event: PacketEvent) {
-        if(event.packetType == PacketType.Play.Client.CHAT_SESSION_UPDATE && !api.hasViewer(event.player.uniqueId)) {
+        if (event.packetType == PacketType.Play.Client.CHAT_SESSION_UPDATE && !api.hasViewer(event.player.uniqueId)) {
             api.registerViewer(event.player.uniqueId)
             val playerGroup: PrefixesGroup = api.getHighestGroup(event.player.uniqueId)
             api.setWholeName(event.player.uniqueId, playerGroup)

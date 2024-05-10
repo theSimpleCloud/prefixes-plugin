@@ -30,7 +30,7 @@ class PrefixesDisplaySpigotImpl(
 
     override fun updatePriority(id: String, priority: Int): PacketTeam? {
         val newId = "${toPriorityString(priority)}$id"
-        if(teams.containsKey(newId)) return null
+        if (teams.containsKey(newId)) return null
         val team = getTeam(id) ?: return null
         val packets = team.getUpdateIdPackets(newId)
         viewers.forEach { viewer ->
@@ -97,14 +97,14 @@ class PrefixesDisplaySpigotImpl(
 
     override fun addPlayer(id: String, player: Player) {
         val team = getTeam(id) ?: return
-        if(!team.members.contains(player)) {
+        if (!team.members.contains(player)) {
             team.members.add(player)
             val packet = team.getModifyTeamMembersPacket(UpdateTeamPlayersMode.ADD, listOf(player))
             val displayPacket = team.getUpdateDisplayNamePacket(player)
-                viewers.forEach { viewer ->
-                    manager.sendServerPacket(viewer, packet)
-                    manager.sendServerPacket(viewer, displayPacket)
-                }
+            viewers.forEach { viewer ->
+                manager.sendServerPacket(viewer, packet)
+                manager.sendServerPacket(viewer, displayPacket)
+            }
 
         }
     }
@@ -114,7 +114,7 @@ class PrefixesDisplaySpigotImpl(
         val team = updatePriority(id, priority) ?: createTeam(id, priority) ?: return
         team.prefix = prefix
         team.suffix = suffix
-        val packet = team.getTeamUpdatePacket(if(exists) UpdateTeamMode.UPDATE else UpdateTeamMode.CREATE)
+        val packet = team.getTeamUpdatePacket(if (exists) UpdateTeamMode.UPDATE else UpdateTeamMode.CREATE)
         val displayPackets = team.getUpdateDisplayNamePackets()
         viewers.forEach { viewer ->
             manager.sendServerPacket(viewer, packet)

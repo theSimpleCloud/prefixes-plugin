@@ -1,6 +1,5 @@
 package app.simplecloud.plugin.prefixes.api
 
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 
 interface PrefixesDisplay<C, P, T> {
@@ -15,14 +14,15 @@ interface PrefixesDisplay<C, P, T> {
     fun update(id: String, prefix: C, suffix: C, priority: Int)
 
     fun toPriorityString(priority: Int): String {
-        if(priority < 0) return "000"
-        if(priority > 999) return "999"
+        if (priority < 0) return "000"
+        if (priority > 999) return "999"
         var result = priority.toString()
-        for(i in 0 until 3 - result.length) {
+        for (i in 0 until 3 - result.length) {
             result = "0${result}"
         }
         return result
     }
+
     fun addPlayer(id: String, player: P)
     fun removePlayer(player: P)
     fun setViewer(player: P): Boolean

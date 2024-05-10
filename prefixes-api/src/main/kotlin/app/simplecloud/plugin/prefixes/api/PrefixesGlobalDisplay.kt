@@ -1,9 +1,7 @@
 package app.simplecloud.plugin.prefixes.api
 
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
-import java.util.Optional
-import java.util.UUID
+import java.util.*
 
 open class PrefixesGlobalDisplay<C, P, T> {
 
@@ -17,7 +15,7 @@ open class PrefixesGlobalDisplay<C, P, T> {
         displays.filter { players.isEmpty() || players.contains(it.key) }.forEach { display ->
             action(display.value)
         }
-        if(players.isEmpty())
+        if (players.isEmpty())
             defaultDisplay?.let { action(it) }
     }
 
@@ -46,31 +44,37 @@ open class PrefixesGlobalDisplay<C, P, T> {
             it.createTeam(id)
         }
     }
+
     fun updatePrefix(id: String, prefix: C, vararg players: UUID) {
         executeFor(players.toList()) {
             it.updatePrefix(id, prefix)
         }
     }
+
     fun updateSuffix(id: String, suffix: C, vararg players: UUID) {
         executeFor(players.toList()) {
             it.updateSuffix(id, suffix)
         }
     }
+
     fun updatePriority(id: String, priority: Int, vararg players: UUID) {
         executeFor(players.toList()) {
             it.updatePriority(id, priority)
         }
     }
+
     fun update(id: String, prefix: C, suffix: C, priority: Int, vararg players: UUID) {
         executeFor(players.toList()) {
             it.update(id, prefix, suffix, priority)
         }
     }
+
     fun addPlayer(id: String, player: P, vararg players: UUID) {
         executeFor(players.toList()) {
             it.addPlayer(id, player)
         }
     }
+
     fun removePlayer(player: P, vararg players: UUID) {
         executeFor(players.toList()) {
             it.removePlayer(player)

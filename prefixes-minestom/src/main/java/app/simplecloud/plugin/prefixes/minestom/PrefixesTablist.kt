@@ -47,7 +47,7 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
     }
 
     override fun createTeam(id: String, priority: Int): Team? {
-        if(getTeam(id) != null) return null
+        if (getTeam(id) != null) return null
         val team = MinecraftServer.getTeamManager().createTeam("${toPriorityString(priority)}$id")
         teams.add(team)
         return team
@@ -88,7 +88,7 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
 
     override fun removePlayer(player: Player) {
         teams.forEach {
-            if(it.players.contains(player)) {
+            if (it.players.contains(player)) {
                 it.removeMember(player.username)
             }
         }
@@ -159,28 +159,32 @@ class PrefixesTablist : PrefixesDisplay<Component, Player, Team> {
     }
 
     private fun getUpdateTeamPacket(team: Team): TeamsPacket {
-        return TeamsPacket(team.teamName, TeamsPacket.UpdateTeamAction(
-            team.teamDisplayName,
-            team.friendlyFlags,
-            team.nameTagVisibility,
-            team.collisionRule,
-            team.teamColor,
-            team.prefix,
-            team.suffix
-        ))
+        return TeamsPacket(
+            team.teamName, TeamsPacket.UpdateTeamAction(
+                team.teamDisplayName,
+                team.friendlyFlags,
+                team.nameTagVisibility,
+                team.collisionRule,
+                team.teamColor,
+                team.prefix,
+                team.suffix
+            )
+        )
     }
 
     private fun getCreateTeamPacket(team: Team): TeamsPacket {
-        return TeamsPacket(team.teamName, TeamsPacket.CreateTeamAction(
-            team.teamDisplayName,
-            team.friendlyFlags,
-            team.nameTagVisibility,
-            team.collisionRule,
-            team.teamColor,
-            team.prefix,
-            team.suffix,
-            team.members
-        ))
+        return TeamsPacket(
+            team.teamName, TeamsPacket.CreateTeamAction(
+                team.teamDisplayName,
+                team.friendlyFlags,
+                team.nameTagVisibility,
+                team.collisionRule,
+                team.teamColor,
+                team.prefix,
+                team.suffix,
+                team.members
+            )
+        )
     }
 
     private fun getRemoveTeamPacket(team: Team): TeamsPacket {

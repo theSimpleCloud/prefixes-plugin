@@ -10,7 +10,8 @@ class ComponentSerializerImpl {
         private val impl =
             GsonComponentSerializer.builder().build()
         private val legacyImpl =
-            LegacyComponentSerializer.builder().hexColors().character('§').useUnusualXRepeatedCharacterHexFormat().hexCharacter('x').build()
+            LegacyComponentSerializer.builder().hexColors().character('§').useUnusualXRepeatedCharacterHexFormat()
+                .hexCharacter('x').build()
 
         private fun serialize(component: Component): String {
             return impl.serialize(component)

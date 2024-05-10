@@ -10,7 +10,7 @@ class PrefixesPlugin : JavaPlugin(), Listener {
 
     override fun onEnable() {
         val loader = SpigotPrefixesLoader(ProtocolLibrary.getProtocolManager(), this, SpigotPrefixesChatLoader(this))
-        if(loader.load() == null) {
+        if (loader.load() == null) {
             throw NullPointerException("The Prefixes Plugin could not load correctly")
         }
     }

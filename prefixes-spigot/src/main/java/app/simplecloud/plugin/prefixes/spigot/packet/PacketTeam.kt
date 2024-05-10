@@ -23,8 +23,14 @@ abstract class PacketTeam(
     abstract fun getUpdateDisplayNamePacket(player: Player): PacketContainer
 
     companion object {
-        fun create(id: String, color: TextColor?, prefix: Component?, suffix: Component?, members: MutableList<Player>): PacketTeam {
-            if(MinecraftVersion.CAVES_CLIFFS_1.atOrAbove()) {
+        fun create(
+            id: String,
+            color: TextColor?,
+            prefix: Component?,
+            suffix: Component?,
+            members: MutableList<Player>
+        ): PacketTeam {
+            if (MinecraftVersion.CAVES_CLIFFS_1.atOrAbove()) {
                 return ComponentPacketTeam(id, color, prefix, suffix, members)
             }
             //TODO: add support for older minecraft versions

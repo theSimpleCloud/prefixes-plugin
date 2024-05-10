@@ -35,24 +35,31 @@ class ComponentPacketTeam(
     override fun getTeamUpdatePacket(mode: UpdateTeamMode): PacketContainer {
         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
         packet.integers.write(0, mode.getMode())
-        if(mode == UpdateTeamMode.CREATE)
+        if (mode == UpdateTeamMode.CREATE)
             packet.getSpecificModifier(Collection::class.java).write(0, members.map { it.name })
 
         packet.strings.write(0, id)
-        if(packet.optionalStructures.size() > 0) {
+        if (packet.optionalStructures.size() > 0) {
             val optional = packet.optionalStructures.read(0).get()
-            if(prefix != null) optional.chatComponents.write(1, ComponentSerializerImpl.serializeToPacket(prefix!!))
-            if(suffix != null) optional.chatComponents.write(2, ComponentSerializerImpl.serializeToPacket(suffix!!))
-            optional.getEnumModifier(ChatColor::class.java, MinecraftReflection.getMinecraftClass("EnumChatFormat")).write(0, if(color != null) ChatColor.valueOf(NamedTextColor.nearestTo(color!!).toString().uppercase()) else ChatColor.GRAY)
+            if (prefix != null) optional.chatComponents.write(1, ComponentSerializerImpl.serializeToPacket(prefix!!))
+            if (suffix != null) optional.chatComponents.write(2, ComponentSerializerImpl.serializeToPacket(suffix!!))
+            optional.getEnumModifier(ChatColor::class.java, MinecraftReflection.getMinecraftClass("EnumChatFormat"))
+                .write(
+                    0,
+                    if (color != null) ChatColor.valueOf(
+                        NamedTextColor.nearestTo(color!!).toString().uppercase()
+                    ) else ChatColor.GRAY
+                )
             packet.optionalStructures.write(0, Optional.of(optional))
         }
         return packet
     }
+
     override fun getTeamDeletePacket(): PacketContainer {
         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-        if(packet.integers.size() > 1) {
+        if (packet.integers.size() > 1) {
             packet.integers.write(1, 1)
-        }else if(packet.integers.size() > 0) {
+        } else if (packet.integers.size() > 0) {
             packet.integers.write(0, 1)
         }
         packet.strings.write(0, id)
@@ -60,20 +67,24 @@ class ComponentPacketTeam(
     }
 
     override fun getUpdateTeamMembersPackets(): List<PacketContainer> {
-        return listOf(getModifyTeamMembersPacket(UpdateTeamPlayersMode.REMOVE, members), getModifyTeamMembersPacket(UpdateTeamPlayersMode.ADD, members))
+        return listOf(
+            getModifyTeamMembersPacket(UpdateTeamPlayersMode.REMOVE, members),
+            getModifyTeamMembersPacket(UpdateTeamPlayersMode.ADD, members)
+        )
     }
 
     override fun getModifyTeamMembersPacket(mode: UpdateTeamPlayersMode, players: List<Player>): PacketContainer {
         val packet = PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM)
-        if(packet.integers.size() > 1) {
+        if (packet.integers.size() > 1) {
             packet.integers.write(1, mode.getMode())
-        }else if(packet.integers.size() > 0) {
+        } else if (packet.integers.size() > 0) {
             packet.integers.write(0, mode.getMode())
         }
         packet.strings.write(0, id)
         packet.getSpecificModifier(Collection::class.java).write(0, players.map { it.name })
         return packet
     }
+
     override fun getUpdateDisplayNamePackets(): List<PacketContainer> {
         return members.map { getUpdateDisplayNamePacket(it) }
     }
@@ -83,15 +94,24 @@ class ComponentPacketTeam(
         packet.playerInfoActions.write(0, EnumSet.of(EnumWrappers.PlayerInfoAction.UPDATE_DISPLAY_NAME))
         val infoData = mutableListOf<PlayerInfoData>()
         val profile = WrappedGameProfile.fromPlayer(player)
-        infoData.add(PlayerInfoData(profile, player.ping, EnumWrappers.NativeGameMode.fromBukkit(player.gameMode), ComponentSerializerImpl.serializeToPacket(constructDisplayName(player))))
+        infoData.add(
+            PlayerInfoData(
+                profile,
+                player.ping,
+                EnumWrappers.NativeGameMode.fromBukkit(player.gameMode),
+                ComponentSerializerImpl.serializeToPacket(constructDisplayName(player))
+            )
+        )
         packet.playerInfoDataLists.write(1, infoData)
         return packet
     }
 
     private fun constructDisplayName(player: Player): Component {
-        if(!members.contains(player)) return Component.text(player.name)
-        val base = if(prefix != null) prefix!!.append(Component.text(player.name).color(color)) else Component.text(player.name)
-        if(suffix != null) base.append(suffix!!)
+        if (!members.contains(player)) return Component.text(player.name)
+        val base = if (prefix != null) prefix!!.append(
+            Component.text(player.name).color(color)
+        ) else Component.text(player.name)
+        if (suffix != null) base.append(suffix!!)
         return base
     }
 }
