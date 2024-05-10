@@ -1,4 +1,4 @@
-package app.simplecloud.plugin.prefixes.spigot
+package app.simplecloud.plugin.prefixes.shared
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import net.kyori.adventure.text.Component
@@ -18,6 +18,10 @@ class ComponentSerializerImpl {
 
         fun serializeLegacy(component: Component): String {
             return legacyImpl.serialize(component)
+        }
+
+        fun deserializeLegacy(text: String): Component {
+            return legacyImpl.deserialize(text)
         }
 
         fun serializeToPacket(component: Component): WrappedChatComponent {

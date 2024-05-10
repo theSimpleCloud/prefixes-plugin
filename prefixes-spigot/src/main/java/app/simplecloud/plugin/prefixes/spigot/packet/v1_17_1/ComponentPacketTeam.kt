@@ -1,6 +1,6 @@
 package app.simplecloud.plugin.prefixes.spigot.packet.v1_17_1
 
-import app.simplecloud.plugin.prefixes.spigot.ComponentSerializerImpl
+import app.simplecloud.plugin.prefixes.shared.ComponentSerializerImpl
 import app.simplecloud.plugin.prefixes.spigot.packet.PacketTeam
 import app.simplecloud.plugin.prefixes.spigot.packet.UpdateTeamMode
 import app.simplecloud.plugin.prefixes.spigot.packet.UpdateTeamPlayersMode

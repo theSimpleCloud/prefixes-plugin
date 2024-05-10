@@ -1,10 +1,9 @@
 package app.simplecloud.plugin.prefixes.spigot.loader
 
-import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesChatLoader
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesApiImpl
 import app.simplecloud.plugin.prefixes.shared.MiniMessageImpl
-import app.simplecloud.plugin.prefixes.spigot.ComponentSerializerImpl
+import app.simplecloud.plugin.prefixes.shared.ComponentSerializerImpl
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
