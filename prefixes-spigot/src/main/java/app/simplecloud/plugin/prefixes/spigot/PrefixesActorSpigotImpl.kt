@@ -63,6 +63,7 @@ class PrefixesActorSpigotImpl(
         )
         if (group.getColor() != null)
             setColor(target, group.getColor()!!, *viewers)
+        scoreboard.removePlayer(player, *viewers)
         scoreboard.addPlayer(player.name, player, *viewers)
     }
 

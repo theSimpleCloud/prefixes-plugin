@@ -7,6 +7,7 @@ import app.simplecloud.plugin.prefixes.api.impl.PrefixesApiImpl
 import app.simplecloud.plugin.prefixes.api.impl.PrefixesConfigImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesApiLuckPermsImpl
 import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
+import app.simplecloud.plugin.prefixes.spigot.LuckPermsListener
 import app.simplecloud.plugin.prefixes.spigot.PrefixesActorSpigotImpl
 import app.simplecloud.plugin.prefixes.spigot.PrefixesGlobalDisplaySpigotImpl
 import app.simplecloud.plugin.prefixes.spigot.packet.PlayerCreatePacketAdapter
@@ -48,6 +49,7 @@ class SpigotPrefixesLoader(
         Bukkit.getServicesManager().register(PrefixesApi::class.java, api, plugin, ServicePriority.Normal)
         manager.addPacketListener(PlayerCreatePacketAdapter(plugin, api))
         chatLoader.load(api)
+        LuckPermsListener(plugin, luckPerms, api).init()
         return api
     }
 
@@ -59,7 +61,7 @@ class SpigotPrefixesLoader(
                 val group = api.getHighestGroup(event.player.uniqueId)
                 api.setWholeName(event.player.uniqueId, group)
             }
-        }, 15L)
+        }, 10L)
     }
 
     @EventHandler

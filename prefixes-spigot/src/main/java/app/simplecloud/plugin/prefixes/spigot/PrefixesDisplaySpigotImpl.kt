@@ -20,18 +20,17 @@ class PrefixesDisplaySpigotImpl(
         if (getTeam(id) != null) return null
         val name = "${toPriorityString(priority)}$id"
         val team = PacketTeam.create(name, null, null, null, mutableListOf())
-        teams[name] = team
+        teams[id] = team
         return team
     }
 
     override fun getTeam(id: String): PacketTeam? {
-        return teams.getOrDefault(teams.keys.find { it.endsWith(id) }, null)
+        return teams.getOrDefault(id, null)
     }
 
     override fun updatePriority(id: String, priority: Int): PacketTeam? {
-        val newId = "${toPriorityString(priority)}$id"
-        if (teams.containsKey(newId)) return null
         val team = getTeam(id) ?: return null
+        val newId = "${toPriorityString(priority)}$id"
         val packets = team.getUpdateIdPackets(newId)
         viewers.forEach { viewer ->
             packets.forEach { packet ->
