@@ -10,10 +10,13 @@ import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
 import app.simplecloud.plugin.prefixes.spigot.LuckPermsListener
 import app.simplecloud.plugin.prefixes.spigot.PrefixesActorSpigotImpl
 import app.simplecloud.plugin.prefixes.spigot.PrefixesGlobalDisplaySpigotImpl
+import app.simplecloud.plugin.prefixes.spigot.PrefixesPlugin
 import app.simplecloud.plugin.prefixes.spigot.event.PrefixesConfigureEvent
+import app.simplecloud.plugin.prefixes.spigot.event.PrefixesConfiguredEvent
 import app.simplecloud.plugin.prefixes.spigot.packet.PlayerCreatePacketAdapter
 import com.comphenix.protocol.ProtocolManager
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
@@ -62,7 +65,7 @@ class SpigotPrefixesLoader(
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
             if(!api.hasViewer(event.player.uniqueId)) {
                 api.registerViewer(event.player.uniqueId)
-                applyFirstName(api, event.player)
+                applyFirstName(api, plugin, event.player)
             }
         }, 10L)
     }
@@ -73,12 +76,14 @@ class SpigotPrefixesLoader(
     }
 
     companion object {
-        fun applyFirstName(api: PrefixesApi, player: Player) {
+        fun applyFirstName(api: PrefixesApi, plugin: Plugin, player: Player) {
             val group = api.getHighestGroup(player.uniqueId)
-            val prefixData = PrefixesConfigureEvent(player, group.getPrefix(), group.getSuffix(), group.getColor(), group.getPriority())
-            Bukkit.getPluginManager().callEvent(prefixData)
-            api.setWholeName(player.uniqueId, prefixData.prefix ?: Component.text(""), prefixData.color ?: NamedTextColor.WHITE, prefixData.suffix ?: Component.text(""), prefixData.priority)
-
+            Bukkit.getScheduler().runTask(plugin, Runnable {
+                val prefixData = PrefixesConfigureEvent(player, group.getPrefix(), group.getSuffix(), group.getColor(), group.getPriority())
+                Bukkit.getPluginManager().callEvent(prefixData)
+                api.setWholeName(player.uniqueId, prefixData.prefix ?: Component.text(""), prefixData.color ?: NamedTextColor.WHITE, prefixData.suffix ?: Component.text(""), prefixData.priority)
+                Bukkit.getPluginManager().callEvent(PrefixesConfiguredEvent(player))
+            })
         }
     }
 }

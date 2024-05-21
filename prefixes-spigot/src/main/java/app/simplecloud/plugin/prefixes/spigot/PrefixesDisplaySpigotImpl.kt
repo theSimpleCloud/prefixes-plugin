@@ -32,6 +32,7 @@ class PrefixesDisplaySpigotImpl(
         val team = getTeam(id) ?: return null
         val newId = "${toPriorityString(priority)}$id"
         val packets = team.getUpdateIdPackets(newId)
+        team.priority = priority
         viewers.forEach { viewer ->
             packets.forEach { packet ->
                 manager.sendServerPacket(viewer, packet)

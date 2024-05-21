@@ -23,7 +23,7 @@ class ComponentPacketTeam(
     prefix: Component?,
     suffix: Component?,
     members: MutableList<Player> = mutableListOf()
-) : PacketTeam(id, color, prefix, suffix, members) {
+) : PacketTeam(id, color, prefix, suffix,  members, 0) {
     override fun getUpdateIdPackets(id: String): List<PacketContainer> {
         val toReturn = mutableListOf<PacketContainer>()
         toReturn.add(getTeamDeletePacket())
@@ -108,10 +108,10 @@ class ComponentPacketTeam(
 
     private fun constructDisplayName(player: Player): Component {
         if (!members.contains(player)) return Component.text(player.name)
-        val base = if (prefix != null) prefix!!.append(
+        var base = if (prefix != null) prefix!!.append(
             Component.text(player.name).color(color)
         ) else Component.text(player.name)
-        if (suffix != null) base.append(suffix!!)
+        if (suffix != null) base = base.append(suffix!!)
         return base
     }
 }

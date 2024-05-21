@@ -67,7 +67,8 @@ abstract class PrefixesApiImpl : PrefixesApi {
         priority: Int,
         viewers: Audience
     ) {
-        setWholeName(uniqueId, prefix, color, suffix, priority, viewers)
+        val uuids = toUUIDList(viewers)
+        setWholeName(uniqueId, prefix, color, suffix, priority, *uuids.toTypedArray())
     }
 
     override fun formatChatMessage(target: UUID, viewer: Audience, format: String, message: Component): Component {

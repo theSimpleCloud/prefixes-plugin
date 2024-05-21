@@ -29,10 +29,11 @@ class PrefixesActorSpigotImpl(
         val display = PrefixesDisplaySpigotImpl(manager)
         scoreboard.register(target, display)
         display.setViewer(targetPlayer)
+        val defaultDisplay = scoreboard.getDefaultDisplay() ?: return
         Bukkit.getOnlinePlayers().forEach { player ->
             if (player.uniqueId != target) {
-                val group = api.getHighestGroup(player.uniqueId)
-                applyGroup(player.uniqueId, group, target)
+                val team = defaultDisplay.getTeam(player.name) ?: return@forEach
+                apply(player.uniqueId, team.prefix ?: Component.text(""), team.color ?: NamedTextColor.WHITE, team.suffix ?: Component.text(""), team.priority ?: 0, target)
             }
         }
     }

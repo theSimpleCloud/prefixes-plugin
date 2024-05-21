@@ -12,7 +12,8 @@ abstract class PacketTeam(
     open var color: TextColor?,
     open var prefix: Component?,
     open var suffix: Component?,
-    open var members: MutableList<Player> = mutableListOf()
+    open var members: MutableList<Player> = mutableListOf(),
+    open var priority: Int?,
 ) {
     abstract fun getUpdateIdPackets(id: String): List<PacketContainer>
     abstract fun getTeamUpdatePacket(mode: UpdateTeamMode): PacketContainer

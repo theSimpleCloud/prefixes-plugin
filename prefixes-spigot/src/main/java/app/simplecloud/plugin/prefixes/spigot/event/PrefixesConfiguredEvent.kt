@@ -15,6 +15,10 @@ data class PrefixesConfiguredEvent(
 
     companion object {
         private val handlers: HandlerList = HandlerList()
+        @JvmStatic
+        fun getHandlerList(): HandlerList {
+            return handlers
+        }
     }
     override fun getHandlers(): HandlerList {
        return Companion.handlers
