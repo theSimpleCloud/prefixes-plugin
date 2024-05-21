@@ -56,8 +56,8 @@ class PrefixesActorSpigotImpl(
         val player: Player = Bukkit.getPlayer(target) ?: return
         scoreboard.update(
             player.name,
-            group.getPrefix(),
-            group.getSuffix(),
+            group.getPrefix() ?: Component.text(""),
+            group.getSuffix() ?: Component.text(""),
             group.getPriority(),
             *viewers
         )
@@ -65,6 +65,7 @@ class PrefixesActorSpigotImpl(
             setColor(target, group.getColor()!!, *viewers)
         scoreboard.removePlayer(player, *viewers)
         scoreboard.addPlayer(player.name, player, *viewers)
+        apply(target, group.getPrefix() ?: Component.text(""), group.getColor() ?: NamedTextColor.WHITE, group.getSuffix() ?: Component.text(""), group.getPriority(), *viewers)
     }
 
     override fun remove(target: UUID) {
@@ -105,8 +106,22 @@ class PrefixesActorSpigotImpl(
         return MiniMessageImpl.parse(format, tags)
     }
 
-    override fun setColor(target: UUID, color: String, vararg viewers: UUID) {
+    override fun setColor(target: UUID, color: TextColor, vararg viewers: UUID) {
         val player = Bukkit.getPlayer(target) ?: return
-        scoreboard.updateColor(player.name, TextColor.fromHexString(color) ?: NamedTextColor.GRAY, *viewers)
+        scoreboard.updateColor(player.name, color, *viewers)
+    }
+
+    override fun apply(target: UUID, prefix: Component, color: TextColor, suffix: Component, priority: Int, vararg viewers: UUID) {
+        val player: Player = Bukkit.getPlayer(target) ?: return
+        scoreboard.update(
+            player.name,
+            prefix,
+            suffix,
+            priority,
+            *viewers
+        )
+        setColor(target, color, *viewers)
+        scoreboard.removePlayer(player, *viewers)
+        scoreboard.addPlayer(player.name, player, *viewers)
     }
 }

@@ -5,9 +5,9 @@ import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesConfig
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import net.kyori.adventure.audience.Audience
-import net.kyori.adventure.audience.Audiences
 import net.kyori.adventure.identity.Identity
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import java.util.*
 
 abstract class PrefixesApiImpl : PrefixesApi {
@@ -59,6 +59,17 @@ abstract class PrefixesApiImpl : PrefixesApi {
         )
     }
 
+    override fun setWholeName(
+        uniqueId: UUID,
+        prefix: Component,
+        color: TextColor,
+        suffix: Component,
+        priority: Int,
+        viewers: Audience
+    ) {
+        setWholeName(uniqueId, prefix, color, suffix, priority, viewers)
+    }
+
     override fun formatChatMessage(target: UUID, viewer: Audience, format: String, message: Component): Component {
         val uuid = toUUID(viewer)
         return actor.formatMessage(target, uuid, format, message)
@@ -74,7 +85,7 @@ abstract class PrefixesApiImpl : PrefixesApi {
         setSuffix(uniqueId, suffix, *uuids.toTypedArray())
     }
 
-    override fun setColor(uniqueId: UUID, color: String, viewers: Audience) {
+    override fun setColor(uniqueId: UUID, color: TextColor, viewers: Audience) {
         val uuids = toUUIDList(viewers)
         setColor(uniqueId, color, *uuids.toTypedArray())
     }
@@ -91,6 +102,17 @@ abstract class PrefixesApiImpl : PrefixesApi {
         )
     }
 
+    override fun setWholeName(
+        uniqueId: UUID,
+        prefix: Component,
+        color: TextColor,
+        suffix: Component,
+        priority: Int,
+        vararg viewers: UUID
+    ) {
+        actor.apply(uniqueId, prefix, color, suffix, priority, *viewers)
+    }
+
     override fun setPrefix(uniqueId: UUID, prefix: Component, vararg viewers: UUID) {
         actor.setPrefix(uniqueId, prefix, *viewers)
     }
@@ -99,7 +121,7 @@ abstract class PrefixesApiImpl : PrefixesApi {
         actor.setSuffix(uniqueId, suffix, *viewers)
     }
 
-    override fun setColor(uniqueId: UUID, color: String, vararg viewers: UUID) {
+    override fun setColor(uniqueId: UUID, color: TextColor, vararg viewers: UUID) {
         actor.setColor(uniqueId, color, *viewers)
     }
 

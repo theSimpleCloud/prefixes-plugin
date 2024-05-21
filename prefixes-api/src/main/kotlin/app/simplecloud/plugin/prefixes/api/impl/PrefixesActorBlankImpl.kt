@@ -4,6 +4,7 @@ import app.simplecloud.plugin.prefixes.api.PrefixesActor
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import app.simplecloud.plugin.prefixes.api.PrefixesGroup
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import java.util.*
 
 class PrefixesActorBlankImpl : PrefixesActor {
@@ -31,7 +32,11 @@ class PrefixesActorBlankImpl : PrefixesActor {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 
-    override fun setColor(target: UUID, color: String, vararg viewers: UUID) {
+    override fun setColor(target: UUID, color: TextColor, vararg viewers: UUID) {
+        throw NotImplementedError("You need to define a PrefixesActor to use this")
+    }
+
+    override fun apply(target: UUID, prefix: Component, color: TextColor, suffix: Component, priority: Int, vararg viewers: UUID) {
         throw NotImplementedError("You need to define a PrefixesActor to use this")
     }
 

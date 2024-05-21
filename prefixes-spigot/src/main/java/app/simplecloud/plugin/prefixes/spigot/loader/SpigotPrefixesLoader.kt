@@ -10,10 +10,14 @@ import app.simplecloud.plugin.prefixes.shared.PrefixesConfigParser
 import app.simplecloud.plugin.prefixes.spigot.LuckPermsListener
 import app.simplecloud.plugin.prefixes.spigot.PrefixesActorSpigotImpl
 import app.simplecloud.plugin.prefixes.spigot.PrefixesGlobalDisplaySpigotImpl
+import app.simplecloud.plugin.prefixes.spigot.event.PrefixesConfigureEvent
 import app.simplecloud.plugin.prefixes.spigot.packet.PlayerCreatePacketAdapter
 import com.comphenix.protocol.ProtocolManager
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import net.luckperms.api.LuckPerms
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
@@ -58,8 +62,7 @@ class SpigotPrefixesLoader(
         Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, Runnable {
             if(!api.hasViewer(event.player.uniqueId)) {
                 api.registerViewer(event.player.uniqueId)
-                val group = api.getHighestGroup(event.player.uniqueId)
-                api.setWholeName(event.player.uniqueId, group)
+                applyFirstName(api, event.player)
             }
         }, 10L)
     }
@@ -67,5 +70,15 @@ class SpigotPrefixesLoader(
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         api.removeViewer(event.player.uniqueId)
+    }
+
+    companion object {
+        fun applyFirstName(api: PrefixesApi, player: Player) {
+            val group = api.getHighestGroup(player.uniqueId)
+            val prefixData = PrefixesConfigureEvent(player, group.getPrefix(), group.getSuffix(), group.getColor(), group.getPriority())
+            Bukkit.getPluginManager().callEvent(prefixData)
+            api.setWholeName(player.uniqueId, prefixData.prefix ?: Component.text(""), prefixData.color ?: NamedTextColor.WHITE, prefixData.suffix ?: Component.text(""), prefixData.priority)
+
+        }
     }
 }

@@ -44,7 +44,7 @@ enum class UpdateTeamMode(private val mode: Int) {
     UPDATE(2);
 
     fun getMode(): Int {
-        return mode;
+        return mode
     }
 }
 

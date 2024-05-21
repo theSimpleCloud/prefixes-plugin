@@ -2,6 +2,7 @@ package app.simplecloud.plugin.prefixes.api
 
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import java.util.*
 
 interface PrefixesApi {
@@ -39,6 +40,17 @@ interface PrefixesApi {
      * @param viewers A list of all viewers of this change (if empty, everyone is affected)
      */
     fun setWholeName(uniqueId: UUID, groupName: String, vararg viewers: UUID)
+
+    /**
+     * Sets the prefix and suffix of a player in both Tab and Chat
+     * @param uniqueId UUID of the target player
+     * @param prefix the targets prefix
+     * @param color the targets team color
+     * @param suffix the targets suffix
+     * @param priority the users Tablist priority
+     * @param viewers A list of all viewers of this change (if empty, everyone is affected)
+     */
+    fun setWholeName(uniqueId: UUID, prefix: Component, color: TextColor, suffix: Component, priority: Int, vararg viewers: UUID)
 
     /**
      * Sets the prefix of a player in both Tab and Chat
@@ -82,10 +94,10 @@ interface PrefixesApi {
     /**
      * Changes the Scoreboard Team color of the target player (Used in 1.12+ to make player names colorful)
      * @param uniqueId UUID of the target player
-     * @param color Color string (ChatColor on spigot, hex colors on other server implementations)
+     * @param color the [TextColor] of the target players team
      * @param viewers A list of all viewers of this change (if empty, everyone is affected)
      */
-    fun setColor(uniqueId: UUID, color: String, vararg viewers: UUID)
+    fun setColor(uniqueId: UUID, color: TextColor, vararg viewers: UUID)
 
     /**
      * Sets the used PrefixesConfig
@@ -118,6 +130,15 @@ interface PrefixesApi {
     fun setWholeName(uniqueId: UUID, groupName: String, viewers: Audience)
 
     /**
+     * Sets the prefix and suffix of a player in both Tab and Chat
+     * @param uniqueId UUID of the target player
+     * @param prefix the targets prefix
+     * @param color the targets team color
+     * @param suffix the targets suffix
+     * @param viewers An [Audience] of all viewers of this change (if empty, everyone is affected)
+     */
+    fun setWholeName(uniqueId: UUID, prefix: Component, color: TextColor, suffix: Component, priority: Int, viewers: Audience)
+    /**
      * Sets the prefix of a player in both Tab and Chat
      * @param uniqueId UUID of the target player
      * @param prefix prefix to set
@@ -136,10 +157,10 @@ interface PrefixesApi {
     /**
      * Changes the Scoreboard Team color of the target player (Used in 1.12+ to make player names colorful)
      * @param uniqueId UUID of the target player
-     * @param color Color string (ChatColor on spigot, hex colors on other server implementations)
+     * @param color [TextColor] the color of the target players team
      * @param viewers An [Audience] of all viewers of this change (if empty, everyone is affected)
      */
-    fun setColor(uniqueId: UUID, color: String, viewers: Audience)
+    fun setColor(uniqueId: UUID, color: TextColor, viewers: Audience)
 
     /**
      * Returns a formatted chat message of the target player that will be sent to the viewer

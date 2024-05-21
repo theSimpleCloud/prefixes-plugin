@@ -2,8 +2,7 @@ package app.simplecloud.plugin.prefixes.spigot
 
 import app.simplecloud.plugin.prefixes.api.PrefixesApi
 import net.luckperms.api.LuckPerms
-import net.luckperms.api.event.user.track.UserDemoteEvent
-import net.luckperms.api.event.user.track.UserPromoteEvent
+import net.luckperms.api.event.user.UserDataRecalculateEvent
 import org.bukkit.plugin.Plugin
 
 class LuckPermsListener(
@@ -14,18 +13,15 @@ class LuckPermsListener(
 
     fun init() {
         val eventBus = luckPerms.eventBus
-        eventBus.subscribe(plugin, UserPromoteEvent::class.java, this::onUserPromote)
-        eventBus.subscribe(plugin, UserDemoteEvent::class.java, this::onUserDemote)
+        eventBus.subscribe(plugin, UserDataRecalculateEvent::class.java, this::onUserUpdate)
     }
 
-    private fun onUserPromote(event: UserPromoteEvent) {
-        val group = api.getHighestGroup(event.user.uniqueId)
-        api.setWholeName(event.user.uniqueId, group)
-    }
+    private val groups: MutableMap<String, String> = mutableMapOf()
 
-    private fun onUserDemote(event: UserDemoteEvent) {
-        val group = api.getHighestGroup(event.user.uniqueId)
-        api.setWholeName(event.user.uniqueId, group)
+    private fun onUserUpdate(event: UserDataRecalculateEvent) {
+        if(groups.getOrDefault(event.user.uniqueId.toString(), "") == event.user.primaryGroup) return
+        groups[event.user.uniqueId.toString()] = event.user.primaryGroup
+        api.setWholeName(event.user.uniqueId, event.user.primaryGroup)
     }
 
 }

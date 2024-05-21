@@ -86,7 +86,7 @@ class ComponentPacketTeam(
     }
 
     override fun getUpdateDisplayNamePackets(): List<PacketContainer> {
-        return members.map { getUpdateDisplayNamePacket(it) }
+        return members.toList().map { getUpdateDisplayNamePacket(it) }
     }
 
     override fun getUpdateDisplayNamePacket(player: Player): PacketContainer {
