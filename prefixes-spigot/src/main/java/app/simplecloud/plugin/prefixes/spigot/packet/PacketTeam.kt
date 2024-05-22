@@ -29,10 +29,11 @@ abstract class PacketTeam(
             color: TextColor?,
             prefix: Component?,
             suffix: Component?,
+            priority: Int,
             members: MutableList<Player>
         ): PacketTeam {
             if (MinecraftVersion.CAVES_CLIFFS_1.atOrAbove()) {
-                return ComponentPacketTeam(id, color, prefix, suffix, members)
+                return ComponentPacketTeam(id, color, prefix, suffix, priority, members)
             }
             //TODO: add support for older minecraft versions
             throw NullPointerException("No packet wrapper for your server version was found. Please visit https://github.com/thesimplecloud/prefixes-plugin for more information.")

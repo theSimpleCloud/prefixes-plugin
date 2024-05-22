@@ -19,7 +19,7 @@ class PrefixesDisplaySpigotImpl(
     override fun createTeam(id: String, priority: Int): PacketTeam? {
         if (getTeam(id) != null) return null
         val name = "${toPriorityString(priority)}$id"
-        val team = PacketTeam.create(name, null, null, null, mutableListOf())
+        val team = PacketTeam.create(name, null, null, null, priority, mutableListOf())
         teams[id] = team
         return team
     }

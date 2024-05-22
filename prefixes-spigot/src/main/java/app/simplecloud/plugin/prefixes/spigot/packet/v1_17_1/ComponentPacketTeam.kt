@@ -22,8 +22,9 @@ class ComponentPacketTeam(
     color: TextColor?,
     prefix: Component?,
     suffix: Component?,
+    priority: Int,
     members: MutableList<Player> = mutableListOf()
-) : PacketTeam(id, color, prefix, suffix,  members, 0) {
+) : PacketTeam(id, color, prefix, suffix,  members, priority) {
     override fun getUpdateIdPackets(id: String): List<PacketContainer> {
         val toReturn = mutableListOf<PacketContainer>()
         toReturn.add(getTeamDeletePacket())

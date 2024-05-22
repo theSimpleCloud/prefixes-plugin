@@ -81,7 +81,7 @@ class PrefixesActorSpigotImpl(
 
     override fun setSuffix(target: UUID, suffix: Component, vararg viewers: UUID) {
         val player = Bukkit.getPlayer(target) ?: return
-        scoreboard.updatePrefix(player.name, suffix, *viewers)
+        scoreboard.updateSuffix(player.name, suffix, *viewers)
     }
 
     override fun formatMessage(target: UUID, viewer: UUID?, format: String, message: Component): Component {
