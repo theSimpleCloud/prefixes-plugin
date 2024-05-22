@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "app.simplecloud.plugin"
-    version = "1.0-SNAPSHOT"
+    version = "1.1-SNAPSHOT"
 
     apply {
         plugin("java")
@@ -23,6 +23,7 @@ allprojects {
         maven("https://oss.sonatype.org/content/repositories/central")
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://jitpack.io")
+        maven("https://repo.dmulloy2.net/repository/public/")
     }
 
     kotlin {
