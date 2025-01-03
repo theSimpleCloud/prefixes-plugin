@@ -5,7 +5,6 @@
 <div align="center">
 
 [![Modrinth][badge-modrinth]][modrinth]
-[![Dev][badge-dev]][dev]
 [![License][badge-license]][license]
 <br>
 
